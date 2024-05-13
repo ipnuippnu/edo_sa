@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ $title ?? 'Selamat Datang' }} - {{ config('app.name') }}</title>
+
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+
 	<script src="{{ asset('assets/js/plugin/webfont/webfont.min.js') }}"></script>
 	<script>
 		WebFont.load({
@@ -463,6 +467,9 @@
 	<script src="{{ asset('assets/js/plugin/jquery.magnific-popup/jquery.magnific-popup.min.js') }}"></script>
 	<script src="{{ asset('assets/js/atlantis.min.js') }}"></script>
 
+	<script>
+		axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+	</script>
 	@stack('scripts')
 	
 </body>

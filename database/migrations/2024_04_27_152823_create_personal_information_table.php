@@ -21,8 +21,10 @@ return new class extends Migration
             $table->timestamp('phone_verified_at')->nullable();
 
             $table->string('picture')->nullable();
-            $table->string('born_place')->nullable();
+            $table->string('born_place')->nullablinie();
             $table->date('born_date')->nullable();
+
+            $table->year('joined_at')->nullable();
 
             $table->timestamps();
         });

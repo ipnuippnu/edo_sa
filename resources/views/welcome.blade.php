@@ -34,18 +34,18 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Nama Lengkap <span class="text-danger">*</span></label>
-                                                <input name="name" type="text" class="form-control" value="{{ auth()->user()->name }}" required>
+                                                <input name="name" type="text" class="form-control" value="{{ old('name', auth()->user()->name) }}" required>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="mr-2">Jenis Kelamin <span class="text-danger">*</span></label>
 												<div class="selectgroup w-100">
 													<label class="selectgroup-item">
-                                                        <input class="selectgroup-input" type="radio" name="gender" required value="L" @checked( auth()->user()->personal->gender == 'L' )>
+                                                        <input class="selectgroup-input" type="radio" name="gender" required value="L" @checked( old('gender', auth()->user()->personal->gender) == 'L' )>
 														<span class="selectgroup-button"><span class="fa fa-male mr-2"></span> Laki-laki</span>
 													</label>
 													<label class="selectgroup-item">
-                                                        <input class="selectgroup-input" type="radio" name="gender" required value="P" @checked( auth()->user()->personal->gender == 'P' )>
+                                                        <input class="selectgroup-input" type="radio" name="gender" required value="P" @checked( old('gender', auth()->user()->personal->gender) == 'P' )>
 														<span class="selectgroup-button"><span class="fa fa-female mr-2"></span> Perempuan</span>
 													</label>
 												</div>
@@ -55,26 +55,21 @@
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label>Tempat Lahir <span class="text-danger">*</span></label>
-                                                        <input name="born_place" type="text" class="form-control" value="{{ auth()->user()->personal->born_place }}" required placeholder="Trenggalek">
+                                                        <input name="born_place" type="text" class="form-control" value="{{ old('born_place', auth()->user()->personal->born_place) }}" required placeholder="Trenggalek">
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label>Tanggal Lahir <span class="text-danger">*</span></label>
-                                                        <input name="born_date" type="text" class="form-control" value="{{ auth()->user()->personal->born_date }}" required id="datepicker">
+                                                        <input name="born_date" type="text" class="form-control" value="{{ old('born_date', auth()->user()->personal->born_date) }}" required id="datepicker">
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label>No. HP / WhatsApp <span class="text-danger">*</span></label>
+                                                <label>Bergabung IPNU/IPPNU Mulai Tahun <span class="text-danger">*</span></label>
+                                                <input name="name" type="text" class="form-control" value="{{ old('joined_year', auth()->user()->personal->joined_year) }}" placeholder="{{ date('Y') }}" required>
 
-                                                <div class="input-group">
-                                                    <input name="phone" type="text" class="form-control" value="+{{ auth()->user()->personal->phone }}" required>
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-info" type="button">Verifikasi!</button>
-                                                    </div>
-                                                </div>
                                             </div>
 
 
@@ -82,58 +77,44 @@
             
                                         <div class="col-md-6">
 
-                                            <div class="form-group">
+                                            <div class="form-group" x-data="$store.whatsapp">
+                                                <label>No. HP / WhatsApp</label>
+
+                                                <div class="input-group">
+                                                    <input name="phone" type="text" class="form-control" x-model="current">
+                                                    <div class="input-group-append">
+                                                        <button :class="{ 'btn btn-info': true, 'btn-success': current == verified && current != '' }" type="button" id="verify-wa" x-bind:disabled="current == verified || current == ''" >
+                                                            <span x-show="current != verified || current == ''">Verifikasi!</span>
+                                                            <span x-show="current == verified && current != ''">OK</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group" x-data="$store.email">
                                                 <label>Email</label>
 
                                                 <div class="input-group">
-                                                    <input name="email" type="email" class="form-control" value="{{ auth()->user()->email }}" required>
+                                                    <input name="email" type="text" class="form-control" x-model="current">
                                                     <div class="input-group-append">
-                                                        <button class="btn btn-info" type="button">Verifikasi!</button>
+                                                        <button :class="{ 'btn btn-info': true, 'btn-success': current == verified && current != '' }" type="button" id="verify-email" x-bind:disabled="current == verified || current == ''" >
+                                                            <span x-show="current != verified || current == ''">Verifikasi!</span>
+                                                            <span x-show="current == verified && current != ''">OK</span>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
             
                                             <div class="form-group">
-                                                <label>Foto Formal</label>
-                                                <div class="input-file input-file-image">
-                                                    <div class="row">
-                                                        <div class="col-auto">
-                                                            <img class="img-upload-preview img-circle" width="100" height="100" src="http://placehold.it/300x400" alt="preview" style="object-fit: cover">
-                                                            <input type="file" class="form-control form-control-file" id="uploadImg" name="uploadImg" accept="image/*" required>
-                                                            <label for="uploadImg" class=" label-input-file btn btn-primary">Pilih Foto</label>
-                                                        </div>
-                                                        <div class="col-md col-12">
-                                                            <div class="mt-4 mt-xl-0 alert alert-info">Foto ini digunakan untuk keperluan Kartu Tanda Anggota (KTA).
-                                                            <br />
-                                                            <br />
-                                                            Ketentuan:
-                                                            <div class="row gap-0">
-                                                                <div class="col-auto pr-0">
-                                                                    1.
-                                                                </div>
-                                                                <div class="col">
-                                                                    IPNU (<i>Background</i> Biru), IPPNU (<i>Background</i> Merah)
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-auto pr-0">
-                                                                    2.
-                                                                </div>
-                                                                <div class="col">
-                                                                    Memakai atribut organisasi / kemeja putih
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-auto pr-0">
-                                                                    3.
-                                                                </div>
-                                                                <div class="col">
-                                                                    Foto berskala 3:4
-                                                                </div>
-                                                            </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <label>Foto Diri <span class="text-danger">*</span></label>
+                                                <div class="input-file input-file-image d-flex">
+                                                    
+                                                    <img class="img-upload-preview img-circle mb-0" width="100" height="100" src="http://placehold.it/300x400" alt="preview" style="object-fit: cover">
+                                                    
+                                                    <input type="file" class="form-control form-control-file" id="uploadImg" name="uploadImg" accept="image/*" required>
+
+                                                    <label for="uploadImg" class=" label-input-file btn btn-primary my-auto ml-2">Pilih Foto</label>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -159,10 +140,62 @@
     </div>
 
     @push('scripts')
+
     <script>
-    let a = $('#datepicker').datetimepicker({
-        format: 'YYYY-MM-DD',
-    });
+
+        (function(){
+
+            $('#datepicker').datetimepicker({
+                format: 'YYYY-MM-DD',
+            });
+
+            document.addEventListener('alpine:init', () => {
+
+                window.whatsapp = Alpine.store('whatsapp', {
+                    current: '+{{ old('phone', auth()->user()->personal->phone) }}',
+                    verified: '{{ auth()->user()->personal->phone_verified_at != null ? ('+' . auth()->user()->personal->phone) : '' }}',
+                })
+
+                Alpine.store('email', {
+                    current: '{{ old('phone', auth()->user()->email) }}',
+                    verified: '{{ auth()->user()->email_verified_at != null ? auth()->user()->email : '' }}',
+                })
+
+                $('#verify-wa').click(async e => {
+                    e.preventDefault()
+                    
+                    let data = Alpine.store('whatsapp')
+                    axios.post('{{ route('verify.request') }}', {
+                        type: 'whatsapp',
+                        contact: data.current
+                    });
+
+                    swal({
+                        title: 'Verifikasi WhatsApp!',
+                        text: `Silahkan cek pesan WhatsApp (${data.current}).`,
+                        content: "input",
+                        button: {
+                            text: "Verifikasi!",
+                            closeModal: false,
+                        },
+                    })
+                    .then(name => {
+                        if (!name) throw null;
+                        
+                        return axios.post('{{ route('verify.request') }}', {
+
+                            type: 'whatsapp',
+                            contact: data.current
+
+                        });
+                    })
+
+                })
+
+            })
+
+        })()
+
     </script>
     @endpush
 

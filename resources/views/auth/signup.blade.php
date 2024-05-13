@@ -13,7 +13,6 @@
 </div> --}}
 <form class="login-form" action="" method="POST" autocomplete="off">
 
-    <hr>
     <div class="form-group">
         <label for="phone" class="placeholder"><b>Nomor WhatsApp</b> </label>
         <input  id="phone" name="phone" type="text" class="form-control" value="{{ old('phone') }}">
@@ -23,7 +22,8 @@
         <input  id="email" name="email" type="text" class="form-control" value="{{ old('email') }}">
         <small class="form-text text-muted">Anda dapat menggunakan salah satu atau keduanya <b>(Email dan/atau No. WhatsApp)</b></small>
     </div>
-    <hr>
+
+    <hr/>
     
     <div class="form-group">
         <label for="fullname" class="placeholder"><b>Nama Lengkap</b> <span class="text-danger">*</span></label>

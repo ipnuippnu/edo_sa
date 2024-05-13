@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\WhatsappCodeRequested;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -21,6 +22,6 @@ class SendWhatsappCode implements ShouldQueue
      */
     public function handle(WhatsappCodeRequested $event): void
     {
-        //
+        
     }
 }
