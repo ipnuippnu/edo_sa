@@ -469,6 +469,21 @@
 
 	<script>
 		axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+		@if($errors->any())
+		$.notify({
+			message: '{{ $errors->first() }}',
+			icon: 'fa fa-info',
+			title: 'Informasi!'
+		},{
+			type: 'primary',
+			placement: {
+				from: 'top',
+				align: 'right'
+			},
+			time: 1000,
+			delay: 0,
+		});
+		@endif
 	</script>
 	@stack('scripts')
 	

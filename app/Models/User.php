@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -55,5 +56,10 @@ class User extends Authenticatable
     public function name() : Attribute
     {
         return Attribute::make(set: fn(string $value) => ucwords(strtolower($value)));
+    }
+
+    public function getProfilePictureAttribute()
+    {
+        return Storage::disk('profile')->url($this->personal->picture);
     }
 }

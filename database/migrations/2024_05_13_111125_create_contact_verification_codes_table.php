@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('contact_verification_codes', function (Blueprint $table) {
             $table->id();
+            $table->string('type');
             $table->string('contact');
             $table->string('code');
             $table->timestamp('valid_until');

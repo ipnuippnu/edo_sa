@@ -26,4 +26,9 @@ class PersonalInformation extends Model
     {
         return Attribute::make(set: fn(string $value) => ucwords(strtolower($value)));
     }
+
+    public function phone() : Attribute
+    {
+        return Attribute::make(set: fn(string $value) => str_replace('+', '', $value));
+    }
 }

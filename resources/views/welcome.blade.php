@@ -16,7 +16,7 @@
                         <h3 class="wizard-title">Selamat Datang, <b>{{ auth()->user()->name }}</b>.</h3>
                         <small>Terima kasih telah menjadi keluarga besar EDO. Silahkan melengkapi profil kamu untuk mendapatkan berbagai akses layanan.</small>
                     </div>
-                    <form method="POST" action="{{ route('wizard') }}">
+                    <form method="POST" action="{{ route('wizard') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="wizard-body">
                             <div class="row">
@@ -68,7 +68,7 @@
 
                                             <div class="form-group">
                                                 <label>Bergabung IPNU/IPPNU Mulai Tahun <span class="text-danger">*</span></label>
-                                                <input name="name" type="text" class="form-control" value="{{ old('joined_year', auth()->user()->personal->joined_year) }}" placeholder="{{ date('Y') }}" required>
+                                                <input name="joined_year" type="text" class="form-control" value="{{ old('joined_year', auth()->user()->personal->joined_at) }}" placeholder="2017" required>
 
                                             </div>
 
@@ -81,7 +81,7 @@
                                                 <label>No. HP / WhatsApp</label>
 
                                                 <div class="input-group">
-                                                    <input name="phone" type="text" class="form-control" x-model="current">
+                                                    <input type="text" class="form-control" x-model="current" x-bind:readOnly="current != '' && current == verified">
                                                     <div class="input-group-append">
                                                         <button :class="{ 'btn btn-info': true, 'btn-success': current == verified && current != '' }" type="button" id="verify-wa" x-bind:disabled="current == verified || current == ''" >
                                                             <span x-show="current != verified || current == ''">Verifikasi!</span>
@@ -95,7 +95,7 @@
                                                 <label>Email</label>
 
                                                 <div class="input-group">
-                                                    <input name="email" type="text" class="form-control" x-model="current">
+                                                    <input type="text" class="form-control" x-model="current" x-bind:readOnly="current != '' && current == verified">
                                                     <div class="input-group-append">
                                                         <button :class="{ 'btn btn-info': true, 'btn-success': current == verified && current != '' }" type="button" id="verify-email" x-bind:disabled="current == verified || current == ''" >
                                                             <span x-show="current != verified || current == ''">Verifikasi!</span>
@@ -111,7 +111,7 @@
                                                     
                                                     <img class="img-upload-preview img-circle mb-0" width="100" height="100" src="http://placehold.it/300x400" alt="preview" style="object-fit: cover">
                                                     
-                                                    <input type="file" class="form-control form-control-file" id="uploadImg" name="uploadImg" accept="image/*" required>
+                                                    <input type="file" class="form-control form-control-file" id="uploadImg" name="profile" accept="image/*" required>
 
                                                     <label for="uploadImg" class=" label-input-file btn btn-primary my-auto ml-2">Pilih Foto</label>
 
@@ -124,12 +124,8 @@
                         </div>
             
                         <div class="wizard-action">
-                            <div class="pull-left">
-                                <input type="button" class="btn btn-previous btn-fill btn-black" name="previous" value="Sebelumnya">
-                            </div>
                             <div class="pull-right">
-                                <input type="button" class="btn btn-next btn-danger" name="next" value="Selanjutnya">
-                                <input type="submit" class="btn btn-finish btn-danger" name="finish" value="Selesai" style="display: none;">
+                                <button type="submit" class="btn btn-finish btn-danger" style="display: none;">Simpan</button>
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -151,7 +147,7 @@
 
             document.addEventListener('alpine:init', () => {
 
-                window.whatsapp = Alpine.store('whatsapp', {
+                Alpine.store('whatsapp', {
                     current: '+{{ old('phone', auth()->user()->personal->phone) }}',
                     verified: '{{ auth()->user()->personal->phone_verified_at != null ? ('+' . auth()->user()->personal->phone) : '' }}',
                 })
@@ -165,10 +161,27 @@
                     e.preventDefault()
                     
                     let data = Alpine.store('whatsapp')
-                    axios.post('{{ route('verify.request') }}', {
-                        type: 'whatsapp',
-                        contact: data.current
-                    });
+
+                    try {
+                        swal({
+                            text: 'Mohon tunggu...',
+                            closeOnClickOutside: false,
+                            buttons: false
+                        })
+                        await new Promise((resolve, reject) => setTimeout(() => resolve(), 500))
+
+                        await axios.post('{{ route('verify.request') }}', {
+                            type: 'whatsapp',
+                            contact: data.current
+                        });
+                    } catch (error) {
+                        if(error.response.data.message != undefined)
+                        {
+                            swal("Gagal!", error.response.data.message, "error")
+                        }
+                        
+                        throw null
+                    }
 
                     swal({
                         title: 'Verifikasi WhatsApp!',
@@ -179,16 +192,78 @@
                             closeModal: false,
                         },
                     })
-                    .then(name => {
-                        if (!name) throw null;
+                    .then(val => {
+                        if (!val) throw null;
                         
-                        return axios.post('{{ route('verify.request') }}', {
+                        return axios.post('{{ route('verify') }}', {
 
                             type: 'whatsapp',
-                            contact: data.current
+                            contact: data.current,
+                            code: val
 
                         });
                     })
+                    .then(val => val.data)
+                    .then(data => {
+                        Alpine.store('whatsapp').verified = data.data.contact
+                        swal.close()
+                    })
+                    .catch(() => swal.close())
+
+                })
+
+                $('#verify-email').click(async e => {
+                    e.preventDefault()
+                    
+                    let data = Alpine.store('email')
+
+                    try {
+                        swal({
+                            text: 'Mohon tunggu...',
+                            closeOnClickOutside: false,
+                            buttons: false
+                        })
+                        await new Promise((resolve, reject) => setTimeout(() => resolve(), 500))
+
+                        await axios.post('{{ route('verify.request') }}', {
+                            type: 'email',
+                            contact: data.current
+                        });
+                    } catch (error) {
+                        if(error.response.data.message != undefined)
+                        {
+                            swal("Gagal!", error.response.data.message, "error")
+                        }
+                        
+                        throw null
+                    }
+
+                    swal({
+                        title: 'Verifikasi Email!',
+                        text: `Silahkan cek kotak email (${data.current}).`,
+                        content: "input",
+                        button: {
+                            text: "Verifikasi!",
+                            closeModal: false,
+                        },
+                    })
+                    .then(val => {
+                        if (!val) throw null;
+                        
+                        return axios.post('{{ route('verify') }}', {
+
+                            type: 'email',
+                            contact: data.current,
+                            code: val
+
+                        });
+                    })
+                    .then(val => val.data)
+                    .then(data => {
+                        Alpine.store('email').verified = data.data.contact
+                        swal.close()
+                    })
+                    .catch(error => swal.close())
 
                 })
 

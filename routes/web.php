@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->prefix('L-15-4')->group(function(){
 
     Route::get('/', HomeController::class)->name('home');
+
     Route::post('wizard', WizardController::class)->name('wizard');
 
     Route::post('verify', [ContactVerification::class, 'verify'])->name('verify');
@@ -17,7 +18,7 @@ Route::middleware('auth')->prefix('L-15-4')->group(function(){
 
 });
 
-Route::redirect('/', 'lI554');
+Route::redirect('/', 'L-15-4');
 
 Route::middleware('guest')->group(function(){
     Route::get('/login', LoginController::class)->name('login');
