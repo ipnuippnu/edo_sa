@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Wilayah;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -26,6 +27,11 @@ return new class extends Migration
 
             $table->year('joined_at')->nullable();
             $table->timestamp('finished_at')->nullable();
+
+            $table->foreignIdFor(Wilayah::class)->nullable();
+            $table->string('rt', 3)->nullable();
+            $table->string('rw', 3)->nullable();
+            $table->string('dusun')->nullable();
 
             $table->timestamps();
         });

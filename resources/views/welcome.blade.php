@@ -1,277 +1,567 @@
 <x-layout>
+<x-slot:title>Beranda</x-slot:title>
 
-    <div class="panel-header">
-        <div class="page-inner border-bottom pb-0 mb-3">
-            <div class="d-flex align-items-left flex-column">
-                <h2 class="pb-2 fw-bold">Lengkapi Data</h2>
-            </div>
-        </div>
-    </div>
-    <div class="page-inner">
-        <div class="row">
-            <div class="col">
-
-                <div class="wizard-container wizard-round col-md-9">
-                    <div class="wizard-header text-center">
-                        <h3 class="wizard-title">Selamat Datang, <b>{{ auth()->user()->name }}</b>.</h3>
-                        <small>Terima kasih telah menjadi keluarga besar EDO. Silahkan melengkapi profil kamu untuk mendapatkan berbagai akses layanan.</small>
+<div class="row">
+    <div class="col-sm-6 col-md-3">
+        <div class="card card-stats card-round">
+            <div class="card-body ">
+                <div class="row">
+                    <div class="col-5">
+                        <div class="icon-big text-center">
+                            <i class="flaticon-chart-pie text-warning"></i>
+                        </div>
                     </div>
-                    <form method="POST" action="{{ route('wizard') }}" enctype="multipart/form-data">
-                        @csrf
-                        <div class="wizard-body">
-                            <div class="row">
-            
-                                <ul class="wizard-menu nav nav-pills nav-primary">
-                                    <li class="step">
-                                        <a class="nav-link" href="#" data-toggle="tab"><i class="fa fa-user mr-2"></i> Info Personal</a>
-                                    </li>
-                                </ul>
-
-                            </div>
-                            <div class="tab-content">
-                                <div class="tab-pane active">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Nama Lengkap <span class="text-danger">*</span></label>
-                                                <input name="name" type="text" class="form-control" value="{{ old('name', auth()->user()->name) }}" required>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="mr-2">Jenis Kelamin <span class="text-danger">*</span></label>
-												<div class="selectgroup w-100">
-													<label class="selectgroup-item">
-                                                        <input class="selectgroup-input" type="radio" name="gender" required value="L" @checked( old('gender', auth()->user()->personal->gender) == 'L' )>
-														<span class="selectgroup-button"><span class="fa fa-male mr-2"></span> Laki-laki</span>
-													</label>
-													<label class="selectgroup-item">
-                                                        <input class="selectgroup-input" type="radio" name="gender" required value="P" @checked( old('gender', auth()->user()->personal->gender) == 'P' )>
-														<span class="selectgroup-button"><span class="fa fa-female mr-2"></span> Perempuan</span>
-													</label>
-												</div>
-											</div>
-
-                                            <div class="form-row">
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        <label>Tempat Lahir <span class="text-danger">*</span></label>
-                                                        <input name="born_place" type="text" class="form-control" value="{{ old('born_place', auth()->user()->personal->born_place) }}" required placeholder="Trenggalek">
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        <label>Tanggal Lahir <span class="text-danger">*</span></label>
-                                                        <input name="born_date" type="text" class="form-control" value="{{ old('born_date', auth()->user()->personal->born_date) }}" required id="datepicker">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label>Tahun Mulai Masuk IPNU/IPPNU <span class="text-danger">*</span></label>
-                                                <input name="joined_year" type="text" class="form-control" value="{{ old('joined_year', auth()->user()->personal->joined_at) }}" placeholder="2017" required>
-
-                                            </div>
-
-
-                                        </div>
-            
-                                        <div class="col-md-6">
-
-                                            <div class="form-group" x-data="$store.whatsapp">
-                                                <label>No. HP / WhatsApp</label>
-
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" x-model="current" x-bind:readOnly="current != '' && current == verified">
-                                                    <div class="input-group-append">
-                                                        <button :class="{ 'btn btn-info': true, 'btn-success': current == verified && current != '' }" type="button" id="verify-wa" x-bind:disabled="current == verified || current == ''" >
-                                                            <span x-show="current != verified || current == ''">Verifikasi!</span>
-                                                            <span x-show="current == verified && current != ''">OK</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group" x-data="$store.email">
-                                                <label>Email</label>
-
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" x-model="current" x-bind:readOnly="current != '' && current == verified">
-                                                    <div class="input-group-append">
-                                                        <button :class="{ 'btn btn-info': true, 'btn-success': current == verified && current != '' }" type="button" id="verify-email" x-bind:disabled="current == verified || current == ''" >
-                                                            <span x-show="current != verified || current == ''">Verifikasi!</span>
-                                                            <span x-show="current == verified && current != ''">OK</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-            
-                                            <div class="form-group">
-                                                <label>Foto Diri <span class="text-danger">*</span></label>
-                                                <div class="input-file input-file-image d-flex">
-                                                    
-                                                    <img class="img-upload-preview img-circle mb-0" width="100" height="100" src="http://placehold.it/300x400" alt="preview" style="object-fit: cover">
-                                                    
-                                                    <input type="file" class="form-control form-control-file" id="uploadImg" name="profile" accept="image/*" required>
-
-                                                    <label for="uploadImg" class=" label-input-file btn btn-primary my-auto ml-2">Pilih Foto</label>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="col-7 col-stats">
+                        <div class="numbers">
+                            <p class="card-category">Number</p>
+                            <h4 class="card-title">150GB</h4>
                         </div>
-            
-                        <div class="wizard-action">
-                            <div class="pull-right">
-                                <button type="submit" class="btn btn-finish btn-danger" style="display: none;">Simpan</button>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    @push('scripts')
-
-    <script>
-
-        (function(){
-
-            $('#datepicker').datetimepicker({
-                format: 'YYYY-MM-DD',
-            });
-
-            document.addEventListener('alpine:init', () => {
-
-                Alpine.store('whatsapp', {
-                    current: '+{{ old('phone', auth()->user()->personal->phone) }}',
-                    verified: '{{ auth()->user()->personal->phone_verified_at != null ? ('+' . auth()->user()->personal->phone) : '' }}',
-                })
-
-                Alpine.store('email', {
-                    current: '{{ old('phone', auth()->user()->email) }}',
-                    verified: '{{ auth()->user()->email_verified_at != null ? auth()->user()->email : '' }}',
-                })
-
-                $('#verify-wa').click(async e => {
-                    e.preventDefault()
-                    
-                    let data = Alpine.store('whatsapp')
-
-                    try {
-                        swal({
-                            text: 'Mohon tunggu...',
-                            closeOnClickOutside: false,
-                            buttons: false
-                        })
-                        await new Promise((resolve, reject) => setTimeout(() => resolve(), 500))
-
-                        await axios.post('{{ route('verify.request') }}', {
-                            type: 'whatsapp',
-                            contact: data.current
-                        });
-                    } catch (error) {
-                        if(error.response.data.message != undefined)
-                        {
-                            swal("Gagal!", error.response.data.message, "error")
-                        }
-                        
-                        throw null
-                    }
-
-                    swal({
-                        title: 'Verifikasi WhatsApp!',
-                        text: `Silahkan cek pesan WhatsApp (${data.current}).`,
-                        content: "input",
-                        button: {
-                            text: "Verifikasi!",
-                            closeModal: false,
-                        },
-                    })
-                    .then(val => {
-                        if (!val) throw null;
-                        
-                        return axios.post('{{ route('verify') }}', {
-
-                            type: 'whatsapp',
-                            contact: data.current,
-                            code: val
-
-                        });
-                    })
-                    .then(val => val.data)
-                    .then(data => {
-                        Alpine.store('whatsapp').verified = data.data.contact
-                        swal.close()
-                    })
-                    .catch(() => swal.close())
-
-                })
-
-                $('#verify-email').click(async e => {
-                    e.preventDefault()
-                    
-                    let data = Alpine.store('email')
-
-                    try {
-                        swal({
-                            text: 'Mohon tunggu...',
-                            closeOnClickOutside: false,
-                            buttons: false
-                        })
-                        await new Promise((resolve, reject) => setTimeout(() => resolve(), 500))
-
-                        await axios.post('{{ route('verify.request') }}', {
-                            type: 'email',
-                            contact: data.current
-                        });
-                    } catch (error) {
-                        if(error.response.data.message != undefined)
-                        {
-                            swal("Gagal!", error.response.data.message, "error")
-                        }
-                        
-                        throw null
-                    }
-
-                    swal({
-                        title: 'Verifikasi Email!',
-                        text: `Silahkan cek kotak email (${data.current}).`,
-                        content: "input",
-                        button: {
-                            text: "Verifikasi!",
-                            closeModal: false,
-                        },
-                    })
-                    .then(val => {
-                        if (!val) throw null;
-                        
-                        return axios.post('{{ route('verify') }}', {
-
-                            type: 'email',
-                            contact: data.current,
-                            code: val
-
-                        });
-                    })
-                    .then(val => val.data)
-                    .then(data => {
-                        Alpine.store('email').verified = data.data.contact
-                        swal.close()
-                    })
-                    .catch(error => swal.close())
-
-                })
-
-            })
-
-        })()
-
-    </script>
-    @endpush
+    <div class="col-sm-6 col-md-3">
+        <div class="card card-stats card-round">
+            <div class="card-body ">
+                <div class="row">
+                    <div class="col-5">
+                        <div class="icon-big text-center">
+                            <i class="flaticon-coins text-success"></i>
+                        </div>
+                    </div>
+                    <div class="col-7 col-stats">
+                        <div class="numbers">
+                            <p class="card-category">Revenue</p>
+                            <h4 class="card-title">$ 1,345</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="card card-stats card-round">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-5">
+                        <div class="icon-big text-center">
+                            <i class="flaticon-error text-danger"></i>
+                        </div>
+                    </div>
+                    <div class="col-7 col-stats">
+                        <div class="numbers">
+                            <p class="card-category">Errors</p>
+                            <h4 class="card-title">23</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="card card-stats card-round">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-5">
+                        <div class="icon-big text-center">
+                            <i class="flaticon-twitter text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="col-7 col-stats">
+                        <div class="numbers">
+                            <p class="card-category">Followers</p>
+                            <h4 class="card-title">+45K</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-head-row">
+                    <div class="card-title">User Statistics</div>
+                    <div class="card-tools">
+                        <a href="#" class="btn btn-info btn-border btn-round btn-sm mr-2">
+                            <span class="btn-label">
+                                <i class="fa fa-pencil"></i>
+                            </span>
+                            Export
+                        </a>
+                        <a href="#" class="btn btn-info btn-border btn-round btn-sm">
+                            <span class="btn-label">
+                                <i class="fa fa-print"></i>
+                            </span>
+                            Print
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart-container" style="min-height: 375px">
+                    <canvas id="statisticsChart"></canvas>
+                </div>
+                <div id="myChartLegend"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-primary">
+            <div class="card-header">
+                <div class="card-title">Daily Sales</div>
+                <div class="card-category">March 25 - April 02</div>
+            </div>
+            <div class="card-body pb-0">
+                <div class="mb-4 mt-2">
+                    <h1>$4,578.58</h1>
+                </div>
+                <div class="pull-in">
+                    <canvas id="dailySalesChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="card card-primary bg-primary-gradient">
+            <div class="card-body">
+                <h4 class="mb-1 fw-bold">Tasks Progress</h4>
+                <div id="task-complete" class="chart-circle mt-4 mb-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body pb-0">
+                <div class="h1 fw-bold float-right text-primary">+5%</div>
+                <h2 class="mb-2">17</h2>
+                <p class="text-muted">Users online</p>
+                <div class="pull-in sparkline-fix">
+                    <div id="lineChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body pb-0">
+                <div class="h1 fw-bold float-right text-danger">-3%</div>
+                <h2 class="mb-2">27</h2>
+                <p class="text-muted">New Users</p>
+                <div class="pull-in sparkline-fix">
+                    <div id="lineChart2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body pb-0">
+                <div class="h1 fw-bold float-right text-warning">+7%</div>
+                <h2 class="mb-2">213</h2>
+                <p class="text-muted">Transactions</p>
+                <div class="pull-in sparkline-fix">
+                    <div id="lineChart3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row row-card-no-pd">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-head-row">
+                    <h4 class="card-title">Users Geolocation</h4>
+                    <div class="card-tools">
+                        <button class="btn btn-icon btn-link btn-primary btn-xs"><span class="fa fa-angle-down"></span></button>
+                        <button class="btn btn-icon btn-link btn-primary btn-xs btn-refresh-card"><span class="fa fa-sync-alt"></span></button>
+                        <button class="btn btn-icon btn-link btn-primary btn-xs"><span class="fa fa-times"></span></button>
+                    </div>
+                </div>
+                <p class="card-category">
+                Map of the distribution of users around the world</p>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="table-responsive table-hover table-sales">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="flag">
+                                                <img src="../assets/img/flags/id.png" alt="indonesia">
+                                            </div>
+                                        </td>
+                                        <td>Indonesia</td>
+                                        <td class="text-right">
+                                            2.320
+                                        </td>
+                                        <td class="text-right">
+                                            42.18%
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="flag">
+                                                <img src="../assets/img/flags/us.png" alt="united states">
+                                            </div>
+                                        </td>
+                                        <td>USA</td>
+                                        <td class="text-right">
+                                            240
+                                        </td>
+                                        <td class="text-right">
+                                            4.36%
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="flag">
+                                                <img src="../assets/img/flags/au.png" alt="australia">
+                                            </div>
+                                        </td>
+                                        <td>Australia</td>
+                                        <td class="text-right">
+                                            119
+                                        </td>
+                                        <td class="text-right">
+                                            2.16%
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="flag">
+                                                <img src="../assets/img/flags/ru.png" alt="russia">
+                                            </div>
+                                        </td>
+                                        <td>Russia</td>
+                                        <td class="text-right">
+                                            1.081
+                                        </td>
+                                        <td class="text-right">
+                                            19.65%
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="flag">
+                                                <img src="../assets/img/flags/cn.png" alt="china">
+                                            </div>
+                                        </td>
+                                        <td>China</td>
+                                        <td class="text-right">
+                                            1.100
+                                        </td>
+                                        <td class="text-right">
+                                            20%
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="flag">
+                                                <img src="../assets/img/flags/br.png" alt="brazil">
+                                            </div>
+                                        </td>
+                                        <td>Brasil</td>
+                                        <td class="text-right">
+                                            640
+                                        </td>
+                                        <td class="text-right">
+                                            11.63%
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mapcontainer">
+                            <div id="map-example" class="vmap"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Top Products</div>
+            </div>
+            <div class="card-body pb-0">
+                <div class="d-flex">
+                    <div class="avatar">
+                        <img src="../assets/img/logoproduct.svg" alt="..." class="avatar-img rounded-circle">
+                    </div>
+                    <div class="flex-1 pt-1 ml-2">
+                        <h6 class="fw-bold mb-1">CSS</h6>
+                        <small class="text-muted">Cascading Style Sheets</small>
+                    </div>
+                    <div class="d-flex ml-auto align-items-center">
+                        <h3 class="text-info fw-bold">+$17</h3>
+                    </div>
+                </div>
+                <div class="separator-dashed"></div>
+                <div class="d-flex">
+                    <div class="avatar">
+                        <img src="../assets/img/logoproduct.svg" alt="..." class="avatar-img rounded-circle">
+                    </div>
+                    <div class="flex-1 pt-1 ml-2">
+                        <h6 class="fw-bold mb-1">J.CO Donuts</h6>
+                        <small class="text-muted">The Best Donuts</small>
+                    </div>
+                    <div class="d-flex ml-auto align-items-center">
+                        <h3 class="text-info fw-bold">+$300</h3>
+                    </div>
+                </div>
+                <div class="separator-dashed"></div>
+                <div class="d-flex">
+                    <div class="avatar">
+                        <img src="../assets/img/logoproduct3.svg" alt="..." class="avatar-img rounded-circle">
+                    </div>
+                    <div class="flex-1 pt-1 ml-2">
+                        <h6 class="fw-bold mb-1">Ready Pro</h6>
+                        <small class="text-muted">Bootstrap 4 Admin Dashboard</small>
+                    </div>
+                    <div class="d-flex ml-auto align-items-center">
+                        <h3 class="text-info fw-bold">+$350</h3>
+                    </div>
+                </div>
+                <div class="separator-dashed"></div>
+                <div class="pull-in">
+                    <canvas id="topProductsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title fw-mediumbold">Suggested People</div>
+                <div class="card-list">
+                    <div class="item-list">
+                        <div class="avatar">
+                            <img src="../assets/img/jm_denis.jpg" alt="..." class="avatar-img rounded-circle">
+                        </div>
+                        <div class="info-user ml-3">
+                            <div class="username">Jimmy Denis</div>
+                            <div class="status">Graphic Designer</div>
+                        </div>
+                        <button class="btn btn-icon btn-primary btn-round btn-xs">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="item-list">
+                        <div class="avatar">
+                            <img src="../assets/img/chadengle.jpg" alt="..." class="avatar-img rounded-circle">
+                        </div>
+                        <div class="info-user ml-3">
+                            <div class="username">Chad</div>
+                            <div class="status">CEO Zeleaf</div>
+                        </div>
+                        <button class="btn btn-icon btn-primary btn-round btn-xs">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="item-list">
+                        <div class="avatar">
+                            <img src="../assets/img/talha.jpg" alt="..." class="avatar-img rounded-circle">
+                        </div>
+                        <div class="info-user ml-3">
+                            <div class="username">Talha</div>
+                            <div class="status">Front End Designer</div>
+                        </div>
+                        <button class="btn btn-icon btn-primary btn-round btn-xs">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="item-list">
+                        <div class="avatar">
+                            <img src="../assets/img/mlane.jpg" alt="..." class="avatar-img rounded-circle">
+                        </div>
+                        <div class="info-user ml-3">
+                            <div class="username">John Doe</div>
+                            <div class="status">Back End Developer</div>
+                        </div>
+                        <button class="btn btn-icon btn-primary btn-round btn-xs">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="item-list">
+                        <div class="avatar">
+                            <img src="../assets/img/talha.jpg" alt="..." class="avatar-img rounded-circle">
+                        </div>
+                        <div class="info-user ml-3">
+                            <div class="username">Talha</div>
+                            <div class="status">Front End Designer</div>
+                        </div>
+                        <button class="btn btn-icon btn-primary btn-round btn-xs">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="item-list">
+                        <div class="avatar">
+                            <img src="../assets/img/jm_denis.jpg" alt="..." class="avatar-img rounded-circle">
+                        </div>
+                        <div class="info-user ml-3">
+                            <div class="username">Jimmy Denis</div>
+                            <div class="status">Graphic Designer</div>
+                        </div>
+                        <button class="btn btn-icon btn-primary btn-round btn-xs">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-primary bg-primary-gradient">
+            <div class="card-body">
+                <h4 class="mt-3 b-b1 pb-2 mb-4 fw-bold">Active user right now</h4>
+                <h1 class="mb-4 fw-bold">17</h1>
+                <h4 class="mt-3 b-b1 pb-2 mb-5 fw-bold">Page view per minutes</h4>
+                <div id="activeUsersChart"></div>
+                <h4 class="mt-5 pb-3 mb-0 fw-bold">Top active pages</h4>
+                <ul class="list-unstyled">
+                    <li class="d-flex justify-content-between pb-1 pt-1"><small>/product/readypro/index.html</small> <span>7</span></li>
+                    <li class="d-flex justify-content-between pb-1 pt-1"><small>/product/atlantis/demo.html</small> <span>10</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Feed Activity</div>
+            </div>
+            <div class="card-body">
+                <ol class="activity-feed">
+                    <li class="feed-item feed-item-secondary">
+                        <time class="date" datetime="9-25">Sep 25</time>
+                        <span class="text">Responded to need <a href="#">"Volunteer opportunity"</a></span>
+                    </li>
+                    <li class="feed-item feed-item-success">
+                        <time class="date" datetime="9-24">Sep 24</time>
+                        <span class="text">Added an interest <a href="#">"Volunteer Activities"</a></span>
+                    </li>
+                    <li class="feed-item feed-item-info">
+                        <time class="date" datetime="9-23">Sep 23</time>
+                        <span class="text">Joined the group <a href="single-group.php">"Boardsmanship Forum"</a></span>
+                    </li>
+                    <li class="feed-item feed-item-warning">
+                        <time class="date" datetime="9-21">Sep 21</time>
+                        <span class="text">Responded to need <a href="#">"In-Kind Opportunity"</a></span>
+                    </li>
+                    <li class="feed-item feed-item-danger">
+                        <time class="date" datetime="9-18">Sep 18</time>
+                        <span class="text">Created need <a href="#">"Volunteer Opportunity"</a></span>
+                    </li>
+                    <li class="feed-item">
+                        <time class="date" datetime="9-17">Sep 17</time>
+                        <span class="text">Attending the event <a href="single-event.php">"Some New Event"</a></span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-head-row">
+                    <div class="card-title">Support Tickets</div>
+                    <div class="card-tools">
+                        <ul class="nav nav-pills nav-secondary nav-pills-no-bd nav-sm" id="pills-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-today" data-toggle="pill" href="#pills-today" role="tab" aria-selected="true">Today</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" id="pills-week" data-toggle="pill" href="#pills-week" role="tab" aria-selected="false">Week</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-month" data-toggle="pill" href="#pills-month" role="tab" aria-selected="false">Month</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="d-flex">
+                    <div class="avatar avatar-online">
+                        <span class="avatar-title rounded-circle border border-white bg-info">J</span>
+                    </div>
+                    <div class="flex-1 ml-3 pt-1">
+                        <h6 class="text-uppercase fw-bold mb-1">Joko Subianto <span class="text-warning pl-3">pending</span></h6>
+                        <span class="text-muted">I am facing some trouble with my viewport. When i start my</span>
+                    </div>
+                    <div class="float-right pt-1">
+                        <small class="text-muted">8:40 PM</small>
+                    </div>
+                </div>
+                <div class="separator-dashed"></div>
+                <div class="d-flex">
+                    <div class="avatar avatar-offline">
+                        <span class="avatar-title rounded-circle border border-white bg-secondary">P</span>
+                    </div>
+                    <div class="flex-1 ml-3 pt-1">
+                        <h6 class="text-uppercase fw-bold mb-1">Prabowo Widodo <span class="text-success pl-3">open</span></h6>
+                        <span class="text-muted">I have some query regarding the license issue.</span>
+                    </div>
+                    <div class="float-right pt-1">
+                        <small class="text-muted">1 Day Ago</small>
+                    </div>
+                </div>
+                <div class="separator-dashed"></div>
+                <div class="d-flex">
+                    <div class="avatar avatar-away">
+                        <span class="avatar-title rounded-circle border border-white bg-danger">L</span>
+                    </div>
+                    <div class="flex-1 ml-3 pt-1">
+                        <h6 class="text-uppercase fw-bold mb-1">Lee Chong Wei <span class="text-muted pl-3">closed</span></h6>
+                        <span class="text-muted">Is there any update plan for RTL version near future?</span>
+                    </div>
+                    <div class="float-right pt-1">
+                        <small class="text-muted">2 Days Ago</small>
+                    </div>
+                </div>
+                <div class="separator-dashed"></div>
+                <div class="d-flex">
+                    <div class="avatar avatar-offline">
+                        <span class="avatar-title rounded-circle border border-white bg-secondary">P</span>
+                    </div>
+                    <div class="flex-1 ml-3 pt-1">
+                        <h6 class="text-uppercase fw-bold mb-1">Peter Parker <span class="text-success pl-3">open</span></h6>
+                        <span class="text-muted">I have some query regarding the license issue.</span>
+                    </div>
+                    <div class="float-right pt-1">
+                        <small class="text-muted">2 Day Ago</small>
+                    </div>
+                </div>
+                <div class="separator-dashed"></div>
+                <div class="d-flex">
+                    <div class="avatar avatar-away">
+                        <span class="avatar-title rounded-circle border border-white bg-danger">L</span>
+                    </div>
+                    <div class="flex-1 ml-3 pt-1">
+                        <h6 class="text-uppercase fw-bold mb-1">Logan Paul <span class="text-muted pl-3">closed</span></h6>
+                        <span class="text-muted">Is there any update plan for RTL version near future?</span>
+                    </div>
+                    <div class="float-right pt-1">
+                        <small class="text-muted">2 Days Ago</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </x-layout>

@@ -2,23 +2,29 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SignupController;
-use App\Http\Controllers\ContactVerification;
+use App\Http\Controllers\ContactVerificationController;
+use App\Http\Controllers\EducationHistoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\WizardController;
+use App\Http\Middleware\WizardMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->prefix('L-15-4')->group(function(){
+Route::middleware(['auth', WizardMiddleware::class])->prefix('L-155-4')->group(function(){
 
     Route::get('/', HomeController::class)->name('home');
 
-    Route::post('wizard', WizardController::class)->name('wizard');
+    Route::get('wizard', WizardController::class)->name('wizard');
+    Route::post('wizard', [WizardController::class, 'save'])->name('wizard.save');
 
-    Route::post('verify', [ContactVerification::class, 'verify'])->name('verify');
-    Route::post('verify/request', [ContactVerification::class, 'request'])->name('verify.request');
+    Route::post('verify', [ContactVerificationController::class, 'verify'])->name('verify');
+    Route::post('verify/request', [ContactVerificationController::class, 'request'])->name('verify.request');
 
+    Route::apiResource('educations', EducationHistoryController::class)->name('index', 'educations');
+
+    Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 });
 
-Route::redirect('/', 'L-15-4');
+Route::redirect('/', 'L-155-4');
 
 Route::middleware('guest')->group(function(){
     Route::get('/login', LoginController::class)->name('login');

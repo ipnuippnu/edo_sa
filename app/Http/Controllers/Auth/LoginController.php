@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
@@ -39,6 +40,17 @@ class LoginController extends Controller
         $request->session()->regenerate();
         return redirect()->route('home');
         
+    }
+
+    public function logout(Request $request)
+    {
+        $user = Auth::user();
+
+        Auth::logout();
+        $request->session()->regenerate();
+
+        Session::flash('auth', "Anda telah keluar.");
+        return redirect()->route('login');
     }
 
     private function _usingPhone($phone, $pass, $remember)

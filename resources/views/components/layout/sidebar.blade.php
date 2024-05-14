@@ -50,6 +50,20 @@
                         <p>Beranda</p>
                     </a>
                 </li>
+                
+                <li class="nav-section">
+                    <span class="sidebar-mini-icon">
+                        <i class="fa fa-ellipsis-h"></i>
+                    </span>
+                    <h4 class="text-section">Data Diri</h4>
+                </li>
+
+                <li class="nav-item @active("educations")">
+                    <a href="{{ route('educations') }}">
+                        <i class="fas fa-graduation-cap"></i>
+                        <p>Pendidikan</p>
+                    </a>
+                </li>
                 {{-- <li class="nav-section">
                     <span class="sidebar-mini-icon">
                         <i class="fa fa-ellipsis-h"></i>

@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Models\Traits\Ulids;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -60,6 +61,14 @@ class User extends Authenticatable
 
     public function getProfilePictureAttribute()
     {
-        return Storage::disk('profile')->url($this->personal->picture);
+        if($this->picture != null && Storage::disk('profile')->exists($this->picture))
+            return Storage::disk('profile')->url($this->picture);
+
+        return asset('assets/images/user.png');
+    }
+
+    public function education_histories() : HasMany
+    {
+        return $this->hasMany(EducationHistory::class);
     }
 }

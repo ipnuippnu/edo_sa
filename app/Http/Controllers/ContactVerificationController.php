@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-class ContactVerification extends Controller
+class ContactVerificationController extends Controller
 {
     public function request(Request $request)
     {

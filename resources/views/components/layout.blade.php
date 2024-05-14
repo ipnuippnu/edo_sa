@@ -34,7 +34,20 @@
 		<div class="main-panel full-height">
 
 			<div class="container">
-                {{ $slot }}
+
+				<div class="panel-header">
+					<div class="page-inner border-bottom pb-0 mb-3">
+						<div class="d-flex align-items-left flex-column">
+							<h2 class="pb-2 fw-bold">{{ $title ?? 'Selamat Datang' }}</h2>
+						</div>
+					</div>
+				</div>
+				<div class="page-inner">
+					
+					{{ $slot }}
+
+				</div>
+
 			</div>
 
             <x-layout.footer/>

@@ -66,6 +66,7 @@ class SignupController extends Controller
         $user->personal()->create($personal);
 
         DB::commit();
+        
         Session::flash('auth', "Pendaftaran berhasil. Silahkan masuk dengan nomor whatsapp / email anda.");
 
         return redirect()->route('login');
