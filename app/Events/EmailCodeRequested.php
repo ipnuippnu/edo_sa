@@ -30,7 +30,7 @@ class EmailCodeRequested
             'type' => 'email',
             'code' => $code,
             'contact' => $this->email,
-            'valid_until' => Carbon::now()->addHours(6)->addMinute()
+            'valid_until' => Carbon::now()->addHours(6)
         ]);
 
         $this->codeId = $code->id;

@@ -67,7 +67,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label>Bergabung IPNU/IPPNU Mulai Tahun <span class="text-danger">*</span></label>
+                                                <label>Tahun Mulai Masuk IPNU/IPPNU <span class="text-danger">*</span></label>
                                                 <input name="joined_year" type="text" class="form-control" value="{{ old('joined_year', auth()->user()->personal->joined_at) }}" placeholder="2017" required>
 
                                             </div>

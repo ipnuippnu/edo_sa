@@ -68,7 +68,7 @@ class ContactVerification extends Controller
         $code = ContactVerificationCode::whereContact($number ?? $request->get('contact'))
                 ->whereType($request->get('type'))
                 ->whereCode($request->get('code'))
-                ->whereDate('valid_until', '<=', Carbon::now())
+                ->where('valid_until', '>=', Carbon::now())
                 ->first();
 
         if(!$code) throw ValidationException::withMessages(['code' => 'Kode tidak valid/sudah kadaluarsa']);
