@@ -18,9 +18,10 @@
 <div class="sidebar sidebar-style-2" data-background-color="blue">	
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
+
             {{-- <div class="user">
                 <div class="avatar-sm float-left mr-2">
-                    <img src="../assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
+                    <img src="{{ auth()->user()->profile_picture }}" alt="..." class="avatar-img rounded-circle">
                 </div>
                 <div class="info">
                     <a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
@@ -43,6 +44,7 @@
                     </div>
                 </div>
             </div> --}}
+
             <ul class="nav">
                 <li class="nav-item @active("home")">
                     <a href="{{ route('home') }}">

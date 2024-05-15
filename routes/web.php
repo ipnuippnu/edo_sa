@@ -19,7 +19,7 @@ Route::middleware(['auth', WizardMiddleware::class])->prefix('L-155-4')->group(f
     Route::post('verify', [ContactVerificationController::class, 'verify'])->name('verify');
     Route::post('verify/request', [ContactVerificationController::class, 'request'])->name('verify.request');
 
-    Route::apiResource('educations', EducationHistoryController::class)->name('index', 'educations');
+    Route::apiResource('education_histories', EducationHistoryController::class)->name('index', 'educations');
 
     Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 });

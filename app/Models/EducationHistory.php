@@ -15,4 +15,9 @@ class EducationHistory extends Model
     protected $casts = [
         'jenjang' => SchoolLevel::class
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'id';
+    }
 }

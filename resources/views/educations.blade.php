@@ -59,11 +59,12 @@
                                     </div>
                                     <div class="col-md-6" >
                                         <template x-if="jenjang != 1 && jenjang != 2">
-                                            <div class="form-group form-group-default">
-                                                <label>Jurusan <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" required name="jurusan" x-model="jurusan">
+                                            <div class="form-group form-group-default mb-0">
+                                                <label>Jurusan <span class="text-danger" x-show="jenjang != 3">*</span></label>
+                                                <input type="text" class="form-control" x-bind:required="jenjang != 3" name="jurusan" x-model="jurusan">
                                             </div>
                                         </template>
+                                        <p class="text-muted" x-show="jenjang == 3">Kosongkan jika tidak perlu</p>
                                     </div>
                                 </div>
                             </form>
@@ -117,34 +118,58 @@
             })
         })
 
-        $('#educations').DataTable({
+        const table = $('#educations').DataTable({
             searching: false,
             ajax: '{{ route('educations') }}',
+            order: [[3, 'desc']],
             columns: [
-                {data: 'jenjang'},
-                {data: 'name'},
-                {data: 'jurusan'},
+                {data: 'jenjang', orderable: false },
+                {data: 'name', orderable: false},
+                {data: 'jurusan', orderable: false},
                 {data: 'graduated_at'},
-                {render(a, b, c){
+                {orderable: false, render(a, b, c){
 
-                    // return $('<a>').prop('outerHTML');
-
-                    return $('<button>  ').attr('data-toggle', 'tooltip').attr('data-original-title', 'hapus')
-                                        .click(function(){ alert('b') })
+                    return $('<button>  ').attr('data-toggle', 'tooltip').attr('data-original-title', 'Hapus')
                                         .attr('class', 'btn btn-link btn-danger delete')
                                         .html('<span class="fas fa-trash"></span>')
                                         .prop('outerHTML');
-
-                    // return `<button type="button" data-toggle="tooltip" class="btn btn-link btn-danger delete" data-original-title="Hapus">
-                                
-                    //         </button>`
                 }},
             ]
         });
 
-        // $('table').on('click', '.delete', function(){
-        //     alert('a')
-        // })
+        table.on('click', '.delete', async function(){
+            let data = table.row(this.parentElement.parentElement).data()
+            swal({
+                title: `Yakin hapus data ${data.name}?`,
+                text: `Anda tidak dapat membatalkan aksi ini!`,
+                type: 'warning',
+                buttons: {confirm: true, cancel: true}
+            }).then(Delete => {
+                if(Delete)
+                {
+                    return axios.post(`{{ route('educations') }}/${data.id}`, {
+                        '_method': 'DELETE',
+                    }).then(res => res.data).then(res => {
+                        $.notify({
+                            message: res.message,
+                            icon: 'fa fa-info',
+                            title: 'Informasi!'
+                        },{
+                            type: 'primary',
+                            placement: {
+                                from: 'top',
+                                align: 'right'
+                            },
+                            time: 1000,
+                            delay: 0,
+                        });
+
+                        table.ajax.reload()
+                    })
+                }
+            })
+        })
+
     })()
 
     

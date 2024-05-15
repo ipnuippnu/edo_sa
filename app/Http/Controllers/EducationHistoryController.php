@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Enums\SchoolLevel;
 use App\Models\EducationHistory;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 
 class EducationHistoryController extends Controller
@@ -35,7 +35,7 @@ class EducationHistoryController extends Controller
             'jenjang' => ['required', Rule::enum(SchoolLevel::class)],
             'name' => ['required', 'ascii'],
             'graduated_at' => ['required', 'date_format:Y'],
-            'jurusan' => [Rule::requiredIf(!in_array($request->jenjang, [SchoolLevel::SD->value, SchoolLevel::SLTP->value]))]
+            'jurusan' => [Rule::requiredIf(!in_array($request->jenjang, [SchoolLevel::SD->value, SchoolLevel::SLTP->value, SchoolLevel::SLTA->value]))]
         ]);
 
         Auth::user()->education_histories()->create($request->only('jenjang', 'name', 'graduated_at', 'jurusan'));
@@ -50,7 +50,7 @@ class EducationHistoryController extends Controller
      */
     public function show(string $id)
     {
-        //
+        abort(404);
     }
 
     /**
@@ -58,14 +58,19 @@ class EducationHistoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        abort(404);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(EducationHistory $education_history)
     {
-        //
+        $education_history->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Data berhasil dihapus!'
+        ]);
     }
 }

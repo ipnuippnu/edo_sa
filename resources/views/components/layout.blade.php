@@ -482,9 +482,9 @@
 
 	<script>
 		axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-		@if($errors->any())
+		@if($errors->any() || \Session::has('message'))
 		$.notify({
-			message: '{{ $errors->first() }}',
+			message: '{{ \Session::get('message') ?? $errors->first()  }}',
 			icon: 'fa fa-info',
 			title: 'Informasi!'
 		},{

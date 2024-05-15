@@ -28,7 +28,10 @@ return new class extends Migration
             $table->year('joined_at')->nullable();
             $table->timestamp('finished_at')->nullable();
 
-            $table->foreignIdFor(Wilayah::class)->nullable()->constrained();
+            // $table->foreignIdFor(Wilayah::class, 'wilayah_kode')->nullable()->constrained();
+            $table->string('wilayah_kode')->nullable();
+            $table->foreign('wilayah_kode')->references('kode')->on('wilayah');
+
             $table->string('rt', 3)->nullable();
             $table->string('rw', 3)->nullable();
             $table->string('dusun')->nullable();

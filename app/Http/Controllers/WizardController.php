@@ -53,6 +53,8 @@ class WizardController extends Controller
             'dusun' => $request->dusun,
         ]);
 
+        Session::flash('message', 'Data berhasil disimpan!');
+
         return redirect()->route('home');
     }
 }
