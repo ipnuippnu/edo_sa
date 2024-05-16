@@ -81,11 +81,11 @@
                 <table id="educations" class="display table table-striped table-hover" >
                     <thead>
                         <tr>
+                            <th style="width: 5%">Aksi</th>
                             <th>Jenjang</th>
                             <th>Nama</th>
-                            <th>Jurusan</th>
                             <th>Lulus Tahun</th>
-                            <th style="width: 10%">Aksi</th>
+                            <th>Jurusan</th>
                         </tr>
                     </thead>
                     {{-- <tfoot>
@@ -123,17 +123,21 @@
             ajax: '{{ route('educations') }}',
             order: [[3, 'desc']],
             columns: [
+                {orderable: false, render(a, b, c){
+                    return `
+                    <div class="d-flex">
+                        <button class="btn btn-sm btn-danger mr-1 delete" title="Hapus"><i class="fas fa-trash"></i></button>
+                    </div>
+                    `
+                }},
                 {data: 'jenjang', orderable: false },
                 {data: 'name', orderable: false},
-                {data: 'jurusan', orderable: false},
                 {data: 'graduated_at'},
-                {orderable: false, render(a, b, c){
+                {data: 'jurusan', orderable: false, render(val){
+                    if(val == null) return '-'
 
-                    return $('<button>  ').attr('data-toggle', 'tooltip').attr('data-original-title', 'Hapus')
-                                        .attr('class', 'btn btn-link btn-danger delete')
-                                        .html('<span class="fas fa-trash"></span>')
-                                        .prop('outerHTML');
-                }},
+                    return val
+                }}
             ]
         });
 

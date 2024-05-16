@@ -15,7 +15,11 @@ class TrainingController extends Controller
     public function index(Request $request)
     {
         if($request->get('_type') == 'query') return $this->_q($request);
-        elseif($request->expectsJson()) return datatables(Auth::user()->trainings())->only(['id', 'is_formal', 'name', 'pelaksana', 'year'])->make(true);
+
+        elseif($request->expectsJson()) return datatables(Auth::user()->trainings())
+                                            ->addColumn('is_mine', fn(Training $training) => Auth::user()->id == $training->creator_id)
+                                            ->only(['id', 'is_formal', 'is_mine', 'name', 'pelaksana', 'year'])
+                                            ->make(true);
 
         return view('trainings');
     }
@@ -34,7 +38,14 @@ class TrainingController extends Controller
             if(count($result) == 0)
             {
                 $result = [
-                    ['id' => "_null", 'text' => 'Tidak ditemukan. Klik disini untuk membuat baru']
+                    ['id' => "_null", 'text' => 'Tidak ditemukan. Klik disini untuk membuat baru...']
+                ];
+            }
+            else
+            {
+                $result[] = [
+                    'id'    => '_null',
+                    'text'  => 'Klik disini untuk membuat baru...'
                 ];
             }
         }
@@ -57,6 +68,7 @@ class TrainingController extends Controller
 
         else $this->_exists($request);
 
+        Session::flash('message', 'Data berhasil disimpan');
         return redirect()->back();
     }
 
@@ -75,7 +87,8 @@ class TrainingController extends Controller
             'year' => $request->get('year'),
             'pelaksana' => $request->get('pelaksana'),
             'name' => $request->get('nama') ?? $request->get('jenjang'),
-            'is_formal' => $request->get('jenis') === 'formal'
+            'is_formal' => $request->get('jenis') === 'formal',
+            'creator_id' => Auth::user()->id
         ]);
 
         Auth::user()->trainings()->syncWithoutDetaching($training);
@@ -96,7 +109,7 @@ class TrainingController extends Controller
      */
     public function show(string $id)
     {
-        //
+        abort(404);
     }
 
     /**
@@ -104,7 +117,7 @@ class TrainingController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        abort(404);
     }
 
     /**
@@ -115,8 +128,13 @@ class TrainingController extends Controller
         $training = Auth::user()->trainings()->whereId($id)->firstOrFail();
         Auth::user()->trainings()->detach($id);
 
-        Session::flash('message', 'Data berhasil dihapus!');
+        //!!! HAPUS JIKA TIDAK ADA USERNYA
+        if($training->creator_id == Auth::user()->id && !$training->users()->exists())
+            $training->delete();
 
-        return redirect()->back();
+        return response()->json([
+            'status' => true,
+            'message' => 'Data berhasil dihapus'
+        ]);
     }
 }

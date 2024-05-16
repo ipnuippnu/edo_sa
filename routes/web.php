@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\SignupController;
 use App\Http\Controllers\ContactVerificationController;
 use App\Http\Controllers\EducationHistoryController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\WizardController;
 use App\Http\Middleware\WizardMiddleware;
@@ -22,6 +23,7 @@ Route::middleware(['auth', WizardMiddleware::class])->prefix('L-155-4')->group(f
 
     Route::apiResource('education_histories', EducationHistoryController::class)->name('index', 'educations');
     Route::apiResource('trainings', TrainingController::class)->name('index', 'trainings');
+    Route::apiResource('roles', RoleController::class)->name('index', 'roles');
 
     Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 });

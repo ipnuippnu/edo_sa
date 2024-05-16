@@ -1,5 +1,5 @@
 <x-layout>
-<x-slot:title>Riwayat Pengkaderan</x-slot:title>
+<x-slot:title>Jabatan di Pimpinan</x-slot:title>
 
 <div class="col-md-12">
     <div class="card">
@@ -121,7 +121,7 @@
             </div>
 
             <div class="table-responsive">
-                <table id="trainings" class="display table table-striped table-hover" >
+                <table id="roles" class="display table table-striped table-hover" >
                     <thead>
                         <tr>
                             <th style="width: 5%">Aksi</th>
@@ -203,8 +203,8 @@
             }
         })
 
-        const table = $('#trainings').DataTable({
-            ajax: '{{ route('trainings') }}',
+        const table = $('#roles').DataTable({
+            ajax: '{{ route('roles') }}',
             order: [[1, 'asc']],
             columns: [
                 {orderable: false, render(a, b, c){
