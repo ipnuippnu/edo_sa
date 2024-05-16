@@ -123,11 +123,11 @@
                 <table id="educations" class="display table table-striped table-hover" >
                     <thead>
                         <tr>
+                            <th style="width: 10%">Aksi</th>
                             <th>Jenis</th>
                             <th>Nama Pengkaderan</th>
                             <th>Pelaksana</th>
                             <th>Tahun Pelaksanaan</th>
-                            <th style="width: 10%">Aksi</th>
                         </tr>
                     </thead>
                     {{-- <tfoot>
@@ -203,22 +203,28 @@
         })
 
         const table = $('#educations').DataTable({
-            searching: false,
             ajax: '{{ route('trainings') }}',
-            order: [[1, 'desc']],
+            order: [[1, 'asc']],
             columns: [
+                {orderable: false, render(a, b, c){
+
+                    return `
+
+                        <div class="d-flex">
+                            <button class="btn btn-sm btn-danger mr-1 delete" title="Hapus"><i class="fas fa-trash"></i></button>
+                            <button class="btn btn-sm btn-primary ml-1" title="Edit"><i class="fas fa-edit"></i></button>
+                        </div>
+
+                    `
+                    
+                }},
                 {data: 'is_formal', render(data){
                     if(data === true) return `<span class="badge badge-success">FORMAL</span>`
                     return '<span class="badge badge-secondary">NON-FORMAL</span>'
                 } },
                 {data: 'name'},
                 {data: 'pelaksana'},
-                {data: 'year'},
-                {orderable: false, render(a, b, c){
-                    if(c.is_formal === true)
-
-                    return null
-                }},
+                {data: 'year'}
             ]
         });
 
@@ -232,7 +238,7 @@
             }).then(Delete => {
                 if(Delete)
                 {
-                    return axios.post(`{{ route('educations') }}/${data.id}`, {
+                    return axios.post(`{{ route('trainings') }}/${data.id}`, {
                         '_method': 'DELETE',
                     }).then(res => res.data).then(res => {
                         $.notify({

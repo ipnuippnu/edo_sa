@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Training;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class TrainingController extends Controller
 {
@@ -14,7 +15,7 @@ class TrainingController extends Controller
     public function index(Request $request)
     {
         if($request->get('_type') == 'query') return $this->_q($request);
-        elseif($request->expectsJson()) return datatables(Auth::user()->trainings())->make(true);
+        elseif($request->expectsJson()) return datatables(Auth::user()->trainings())->only(['id', 'is_formal', 'name', 'pelaksana', 'year'])->make(true);
 
         return view('trainings');
     }
@@ -111,6 +112,11 @@ class TrainingController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $training = Auth::user()->trainings()->whereId($id)->firstOrFail();
+        Auth::user()->trainings()->detach($id);
+
+        Session::flash('message', 'Data berhasil dihapus!');
+
+        return redirect()->back();
     }
 }
