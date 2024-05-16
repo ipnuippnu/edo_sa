@@ -2,7 +2,7 @@
 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg">
 
     <div class="container-fluid">
-        <div class="collapse" id="search-nav">
+        {{-- <div class="collapse" id="search-nav">
             <form class="navbar-left navbar-form nav-search nav-search-round mr-md-3">
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -13,14 +13,14 @@
                     <input type="text" placeholder="Search ..." class="form-control">
                 </div>
             </form>
-        </div>
+        </div> --}}
         <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-            <li class="nav-item toggle-nav-search hidden-caret">
+            {{-- <li class="nav-item toggle-nav-search hidden-caret">
                 <a class="nav-link" data-toggle="collapse" href="#search-nav" role="button" aria-expanded="false" aria-controls="search-nav">
                     <i class="fa fa-search"></i>
                 </a>
-            </li>
-            <li class="nav-item dropdown hidden-caret">
+            </li> --}}
+            {{-- <li class="nav-item dropdown hidden-caret">
                 <a class="nav-link dropdown-toggle" href="#" id="messageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-envelope"></i>
                 </a>
@@ -216,7 +216,7 @@
             <li class="nav-item">
                 <a href="#" class="nav-link quick-sidebar-toggler">
                     <i class="fa fa-th"></i>
-                </a>
+                </a> --}}
             </li>
             <li class="nav-item dropdown hidden-caret">
                 <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
@@ -231,18 +231,19 @@
                                 <div class="avatar-lg"><img src="{{ auth()->user()->profile_picture }}" alt="Foto Profil" class="avatar-img rounded"></div>
                                 <div class="u-text">
                                     <h4>{{ auth()->user()->name }}</h4>
-                                    <p class="text-muted">{{ auth()->user()->email ?? ('+' . auth()->user()->personal->phone) }}</p><a href="profile.html" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+                                    <p class="text-muted">{{ auth()->user()->email ?? ('+' . auth()->user()->personal->phone) }}</p>
+                                    {{-- <a href="profile.html" class="btn btn-xs btn-secondary btn-sm">View Profile</a> --}}
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">My Profile</a>
+                            {{-- <a class="dropdown-item" href="#">My Profile</a>
                             <a class="dropdown-item" href="#">My Balance</a>
                             <a class="dropdown-item" href="#">Inbox</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Account Setting</a>
-                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-divider"></div> --}}
                             <a class="dropdown-item" href="{{ route('logout') }}">Keluar</a>
                         </li>
                     </div>

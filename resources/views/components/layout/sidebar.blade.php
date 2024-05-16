@@ -66,6 +66,13 @@
                         <p>Pendidikan</p>
                     </a>
                 </li>
+
+                <li class="nav-item @active("trainings")">
+                    <a href="{{ route('trainings') }}">
+                        <i class="fas fa-certificate"></i>
+                        <p>Pengkaderan</p>
+                    </a>
+                </li>
                 {{-- <li class="nav-section">
                     <span class="sidebar-mini-icon">
                         <i class="fa fa-ellipsis-h"></i>

@@ -88,7 +88,7 @@
                             <th style="width: 10%">Aksi</th>
                         </tr>
                     </thead>
-                    <tfoot>
+                    {{-- <tfoot>
                         <tr>
                             <th>Jenjang</th>
                             <th>Nama</th>
@@ -96,7 +96,7 @@
                             <th>Lulus Tahun</th>
                             <th>Aksi</th>
                         </tr>
-                    </tfoot>
+                    </tfoot> --}}
                     <tbody>
 
                     </tbody>
@@ -141,7 +141,7 @@
             let data = table.row(this.parentElement.parentElement).data()
             swal({
                 title: `Yakin hapus data ${data.name}?`,
-                text: `Anda tidak dapat membatalkan aksi ini!`,
+                text: `Setelah dihapus, Anda tidak dapat mengurungkan aksi ini.`,
                 type: 'warning',
                 buttons: {confirm: true, cancel: true}
             }).then(Delete => {
