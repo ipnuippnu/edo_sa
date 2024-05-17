@@ -15,15 +15,14 @@ return new class extends Migration
             $table->id();
             $table->ulid('ulid')->index();
 
-            $table->string('parent_address_code');
-            $table->string('child_address_code')->nullable();
+            $table->string('address_code')->nullable();
             
             $table->string('name')->unique()->fulltext();
             $table->string('display_name')->nullable();
             $table->string('description')->nullable();
 
             $table->enum('level', ['PC', 'PAC', 'PR', 'PK']);
-            $table->enum('type', ['IPNU', 'IPPNU']);
+            $table->enum('banom', ['IPNU', 'IPPNU']);
             $table->string('picture')->nullable();
             
             $table->timestamps();

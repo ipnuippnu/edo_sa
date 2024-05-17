@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "afa406d6ac7bd3d983cc0f753a145b01",
+    "content-hash": "23f1f979345b1dfd0e7214d554751c8a",
     "packages": [
         {
             "name": "brick/math",
@@ -2272,6 +2272,49 @@
                 }
             ],
             "time": "2024-04-12T21:02:21+00:00"
+        },
+        {
+            "name": "mpyw/uuid-ulid-converter",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mpyw/uuid-ulid-converter.git",
+                "reference": "ccafedf9da8fd6d1214e28de78a38e65b7322a13"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mpyw/uuid-ulid-converter/zipball/ccafedf9da8fd6d1214e28de78a38e65b7322a13",
+                "reference": "ccafedf9da8fd6d1214e28de78a38e65b7322a13",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Mpyw\\UuidUlidConverter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "mpyw",
+                    "email": "ryosuke_i_628@yahoo.co.jp"
+                }
+            ],
+            "description": "UUID <=> ULID bidirectional converter",
+            "support": {
+                "issues": "https://github.com/mpyw/uuid-ulid-converter/issues",
+                "source": "https://github.com/mpyw/uuid-ulid-converter/tree/v1.0.0"
+            },
+            "time": "2021-10-27T11:43:40+00:00"
         },
         {
             "name": "nesbot/carbon",

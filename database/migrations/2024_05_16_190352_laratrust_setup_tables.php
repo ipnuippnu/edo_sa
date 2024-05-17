@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class LaratrustSetupTables extends Migration
@@ -46,6 +47,10 @@ class LaratrustSetupTables extends Migration
             $table->foreign('team_id')->references('id')->on('pimpinans')
                 ->onUpdate('cascade')->onDelete('cascade');
 
+            $table->date('valid_until')->nullable();
+            $table->string('confirmed_at')->nullable();
+            $table->timestamp('created_at')->default(DB::raw('NOW()'));
+
             $table->unique(['user_id', 'role_id', 'user_type', 'team_id']);
         });
 
@@ -60,6 +65,10 @@ class LaratrustSetupTables extends Migration
                 ->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('team_id')->references('id')->on('pimpinans')
                 ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->date('valid_until')->nullable();
+            $table->string('confirmed_at')->nullable();
+            $table->timestamp('created_at')->default(DB::raw('NOW()'));
 
             $table->unique(['user_id', 'permission_id', 'user_type', 'team_id']);
         });

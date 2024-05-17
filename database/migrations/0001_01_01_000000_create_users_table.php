@@ -26,6 +26,8 @@ return new class extends Migration
 
             $table->string('picture')->nullable();
 
+            $table->timestamp('first_login_at')->nullable();
+            $table->timestamp('last_login_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

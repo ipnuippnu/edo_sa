@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Pimpinan;
+use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;

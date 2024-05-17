@@ -204,6 +204,8 @@
         })
 
         const table = $('#trainings').DataTable({
+            processing: true,
+            serverSide: true,
             ajax: '{{ route('trainings') }}',
             order: [[1, 'asc']],
             columns: [
