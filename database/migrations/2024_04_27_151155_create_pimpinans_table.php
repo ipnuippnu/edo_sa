@@ -17,8 +17,8 @@ return new class extends Migration
 
             $table->string('address_code')->nullable();
             
-            $table->string('name')->unique()->fulltext();
-            $table->string('display_name')->nullable();
+            $table->string('name')->unique();
+            $table->string('display_name')->fulltext()->nullable();
             $table->string('description')->nullable();
 
             $table->enum('level', ['PC', 'PAC', 'PR', 'PK']);

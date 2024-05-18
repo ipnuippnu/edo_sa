@@ -21,7 +21,7 @@ class RoleController extends Controller
         else if($request->expectsJson())
             return datatables(Auth::user()->roles()->forceUnconfirmed())
                     ->addColumn('team_name', function($q){
-                        return Pimpinan::find($q->team_id, 'name')->name;
+                        return Pimpinan::find($q->team_id)->full_name;
                     })
                     ->only(['id', 'display_name', 'team_id', 'team_name', 'confirmed_at', 'created_at'])
                     ->make(true);
@@ -61,7 +61,7 @@ class RoleController extends Controller
 
         Auth::user()->syncRoles([$request->jabatan], $request->pimpinan);
 
-        Session::flash('message', 'Data berhasil disimpan');
+        Session::flash('message', 'Data berhasil diajukan. Mengunggu persetujuan dari pihak terkait.');
         return redirect()->back();
     }
 
@@ -70,7 +70,7 @@ class RoleController extends Controller
      */
     public function show(string $id)
     {
-        //
+        abort(404);
     }
 
     /**
@@ -78,14 +78,26 @@ class RoleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        abort(404);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'team_id' => 'required|exists:pimpinans,id'
+        ]);
+
+
+
+        Auth::user()->removeRole($id, $request->get('team_id'));
+
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Data berhasil dihapus'
+        ]);
     }
 }

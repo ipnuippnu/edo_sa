@@ -221,7 +221,7 @@
                     
                 }},
                 {data: 'is_formal', render(data){
-                    if(data === true) return `<span class="badge badge-success">FORMAL</span>`
+                    if(data === true) return `<span class="badge badge-primary">FORMAL</span>`
                     return '<span class="badge badge-secondary">NON-FORMAL</span>'
                 } },
                 {data: 'name'},

@@ -17,7 +17,7 @@
         "yajra/laravel-datatables-oracle": "^11"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.13",
+        "itsgoingd/clockwork": "^5.2",
         "fakerphp/faker": "^1.23",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
@@ -70,5 +70,8 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "files": [
+        "app/Helpers/team.php"
+    ]
 }

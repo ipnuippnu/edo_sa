@@ -38,7 +38,7 @@ class WizardController extends Controller
 
         auth()->user()->update(array_filter([
             'name' => $request->get('name'),
-            'picture' => $request->hasFile('profile') ? $request->file('profile')->storeAs('', Str::slug(auth()->user()->id .'-'. auth()->user()->name), ['disk' => 'profile']) : null,
+            'picture' => $request->hasFile('profile') ? $request->file('profile')->storeAs('', Str::slug(auth()->user()->id .'-'. auth()->user()->name) . '.' .  $request->file('profile')->extension(), ['disk' => 'profile']) : null,
         ]));
         
         auth()->user()->personal->update([

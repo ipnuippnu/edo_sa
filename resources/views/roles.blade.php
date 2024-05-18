@@ -137,8 +137,6 @@
         }).on('select2:select', (e) => Alpine.store('formulir').jabatan = e.target.value)
 
         const table = $('#table').DataTable({
-            // processing: true,
-            // serverSide: true,
             ajax: '{{ route('roles') }}',
             order: [[1, 'asc']],
             columnDefs: [{
@@ -155,28 +153,29 @@
                     `
                     
                 }},
-                {data: 'confirmed_at', orderable: false, searchable: false, render(data){
-                    if(data != null) return `<span class="badge badge-success">VALID</span>`
-                    return '<span class="badge badge-secondary">MENUNGGU ACC</span>'
+                {data: 'confirmed_at', render(data){
+                    if(data != null) return `<span class="badge badge-success">Aktif</span>`
+                    return '<span class="badge">Diajukan</span>'
                 } },
                 {data: 'team_name'},
                 {data: 'display_name'},
-                {data: 'created_at', orderable: false, searchable: false}
+                {data: 'created_at'}
             ]
         });
 
         table.on('click', '.delete', async function(){
             let data = table.row(this.parentElement.parentElement).data()
             swal({
-                title: `Yakin hapus data ${data.name}?`,
+                title: `Yakin hapus data ${data.team_name}?`,
                 text: `Setelah dihapus, Anda tidak dapat mengurungkan aksi ini.`,
                 type: 'warning',
                 buttons: {confirm: true, cancel: true}
             }).then(Delete => {
                 if(Delete)
                 {
-                    return axios.post(`{{ route('trainings') }}/${data.id}`, {
+                    return axios.post(`{{ route('roles') }}/${data.id}`, {
                         '_method': 'DELETE',
+                        'team_id': data.team_id
                     }).then(res => res.data).then(res => {
                         $.notify({
                             message: res.message,

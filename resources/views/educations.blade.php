@@ -119,8 +119,6 @@
         })
 
         const table = $('#educations').DataTable({
-            processing: true,
-            serverSide: true,
             searching: false,
             ajax: '{{ route('educations') }}',
             order: [[3, 'desc']],

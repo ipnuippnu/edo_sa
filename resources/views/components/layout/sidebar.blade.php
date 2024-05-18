@@ -77,7 +77,7 @@
                 <li class="nav-item @active("roles")">
                     <a href="{{ route('roles') }}">
                         <i class="fas fa-level-up-alt"></i>
-                        <p>Jabatan Aktif</p>
+                        <p>Jabatan Pengurus</p>
                     </a>
                 </li>
 

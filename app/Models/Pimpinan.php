@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Enums\WilayahLevel;
 use App\Models\Scopes\ValidUserRoleScope;
 use App\Models\Traits\Ulids;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Laratrust\Models\Team;
@@ -56,5 +59,21 @@ class Pimpinan extends Team
     {
         preg_match("/^(?P<level>PC|PAC|PK|PR) (?P<banom>IPNU|IPPNU) (?P<nama>.*)$/", $display_name, $matchs);
         return self::generateNameCode($matchs['banom'], $matchs['level'], $address_code, Str::slug($matchs['nama'], '_'));
+    }
+
+    public function parent() : Attribute
+    {
+        return Attribute::get(fn() => Wilayah::find(preg_replace("/\.\d+$/", '', $this->address_code)));
+    }
+
+    public function fullName() : Attribute
+    {
+        return Attribute::get(function(){
+
+            if($this->parent->level === WilayahLevel::KECAMATAN) return $this->display_name . ", Kec. " . $this->parent->nama;
+
+            return $this->display_name;
+
+        });
     }
 }
