@@ -16,12 +16,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Laratrust\Contracts\LaratrustUser;
-use Laratrust\Traits\HasRolesAndPermissions;
 
-class User extends Authenticatable implements LaratrustUser
+class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRolesAndPermissions, SoftDeletes, Ulids;
+    use HasFactory, Notifiable, SoftDeletes, Ulids;
 
     protected $guarded = ['id'];
 
@@ -79,15 +77,6 @@ class User extends Authenticatable implements LaratrustUser
     public function trainings() : BelongsToMany
     {
         return $this->belongsToMany(Training::class, 'user_training');
-    }
-
-    public function confirmRole(int $role_id, int $team_id) : self
-    {
-        DB::table('role_user')->whereUserId($this->id)->whereRoleId($role_id)->whereTeamId($team_id)->update([
-            'confirmed_at' => Carbon::now()
-        ]);
-
-        return $this;
     }
 
 }

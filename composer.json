@@ -8,11 +8,11 @@
         "php": "^8.2",
         "brick/phonenumber": "^0.6.0",
         "irsyadulibad/laravel-activehelper": "^0.0.1",
+        "jurager/teams": "^2.4",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "mpyw/uuid-ulid-converter": "^1.0",
-        "santigarcor/laratrust": "^8.3",
         "spatie/laravel-activitylog": "^4.8",
         "yajra/laravel-datatables-oracle": "^11"
     },
@@ -70,8 +70,5 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true,
-    "files": [
-        "app/Helpers/team.php"
-    ]
+    "prefer-stable": true
 }
