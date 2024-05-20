@@ -20,13 +20,13 @@ class Pimpinan extends Model
         return Attribute::get(fn() => Wilayah::find(preg_replace("/\.\d+$/", '', $this->address_code)));
     }
 
-    public function display_name() : Attribute
+    public function displayName() : Attribute
     {
         return Attribute::get(function(){
 
-            if($this->parent->level === WilayahLevel::KECAMATAN) return $this->display_name . ", Kec. " . $this->parent->nama;
+            if($this->parent->level === WilayahLevel::KECAMATAN) return $this->name . ", Kec. " . $this->parent->nama;
 
-            return $this->display_name;
+            return $this->name;
 
         });
     }

@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\WilayahLevel;
 use App\Models\Pimpinan;
-use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class PimpinanController extends Controller
 {
@@ -20,11 +17,11 @@ class PimpinanController extends Controller
         {
             $result = Pimpinan::where(function($query) use($request) {
 
-                $query->whereBanom(Auth::user()->personal->gender === 'P' ? 'IPPNU' : 'IPNU')->whereFullText('display_name', $request->get('q'));
+                $query->whereBanom(Auth::user()->personal->gender === 'P' ? 'IPPNU' : 'IPNU')->whereFullText('name', $request->get('q'));
 
-            })->get()->append('full_name')->map(fn($v) => [
+            })->get()->map(fn($v) => [
                 'id' => $v->id,
-                'text' => $v->full_name
+                'text' => $v->display_name
             ]);
         }
 

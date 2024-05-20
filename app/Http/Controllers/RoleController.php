@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jabatan;
 use App\Models\Pimpinan;
-use App\Models\Role;
-use App\Models\User;
+use App\Models\UserJabatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -19,11 +19,9 @@ class RoleController extends Controller
         if($request->get('_type') == 'query') return $this->_q($request);
 
         else if($request->expectsJson())
-            return datatables(Auth::user()->roles()->forceUnconfirmed())
-                    ->addColumn('team_name', function($q){
-                        return Pimpinan::find($q->team_id)->full_name;
-                    })
-                    ->only(['id', 'display_name', 'team_id', 'team_name', 'confirmed_at', 'created_at'])
+            return datatables(Auth::user()->jabatan_pivots()->with('jabatan')->with('pimpinan'))
+                    ->only(['id', 'status', 'jabatan.name', 'pimpinan.name', 'created_at'])
+                    ->editColumn('status', fn($data) => $data->status->name)
                     ->make(true);
         
         return view('roles');
@@ -33,11 +31,7 @@ class RoleController extends Controller
     {
         if($request->get('q') != "")
         {
-            $result = Role::where(function($q){
-
-                $q->where('banom_only', Auth::user()->personal->gender === 'P' ? 'IPPNU' : 'IPNU')->orWhereNull('banom_only');
-                
-            })->whereFullText('display_name', $request->get('q'))->get(['id', 'display_name as text']);
+            $result = Jabatan::{strtolower(Auth::user()->banom)}()->whereFullText('name', $request->get('q'))->get(['id', 'name as text']);
 
         }
 
@@ -55,11 +49,11 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'jabatan' => 'required|exists:roles,id',
+            'jabatan' => 'required|exists:jabatans,id',
             'pimpinan' => 'required|exists:pimpinans,id'
         ]);
 
-        Auth::user()->syncRoles([$request->jabatan], $request->pimpinan);
+        Auth::user()->tambahJabatan($request->jabatan, $request->pimpinan);
 
         Session::flash('message', 'Data berhasil diajukan. Mengunggu persetujuan dari pihak terkait.');
         return redirect()->back();
@@ -86,14 +80,8 @@ class RoleController extends Controller
      */
     public function destroy(Request $request, string $id)
     {
-        $request->validate([
-            'team_id' => 'required|exists:pimpinans,id'
-        ]);
-
-
-
-        Auth::user()->removeRole($id, $request->get('team_id'));
-
+        $role = UserJabatan::whereUserId(Auth::user()->id)->whereId($id)->firstOrFail();
+        $role->delete();
 
         return response()->json([
             'status' => true,

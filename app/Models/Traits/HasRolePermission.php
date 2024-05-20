@@ -38,10 +38,10 @@ trait HasRolePermission
 
     public function tambahJabatan(int|Jabatan|string $jabatan, int|Pimpinan $pimpinan, array $attributes = [])
     {
-        if(is_int($jabatan)) $jabatan = Jabatan::find($jabatan);
+        if(is_numeric($jabatan)) $jabatan = Jabatan::find($jabatan);
         else if(is_string($jabatan)) $jabatan = Jabatan::whereCode($jabatan)->first();
 
-        if(is_int($pimpinan)) $pimpinan = Pimpinan::find($pimpinan);
+        if(is_numeric($pimpinan)) $pimpinan = Pimpinan::find($pimpinan);
         
         return $this->jabatan_pivots()->create(array_merge([
             'jabatan_id' => $jabatan->id,

@@ -24,6 +24,11 @@ class WizardMiddleware
                 return redirect()->route('home');
         }
 
+        else if(auth()->user()->account_type == 1 && in_array($request->route()->getName(), ['wizard', 'wizard.save']))
+        {
+            abort(404);
+        }
+
         return $next($request);
     }
 }

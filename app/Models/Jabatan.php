@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\JabatanStatus;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,10 +12,6 @@ class Jabatan extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
-
-    public $casts = [
-        'status' => JabatanStatus::class
-    ];
 
     public function scopeIpnu(Builder $builder)
     {

@@ -153,12 +153,13 @@
                     `
                     
                 }},
-                {data: 'confirmed_at', render(data){
-                    if(data != null) return `<span class="badge badge-success">Aktif</span>`
-                    return '<span class="badge">Diajukan</span>'
-                } },
-                {data: 'team_name'},
-                {data: 'display_name'},
+                {data: 'status', render(data){
+                    if(data == "PENDING") return `<span class="badge badge-secondary">${data}</span>`;
+                    else if(data == "AKTIF") return `<span class="badge badge-success">${data}</span>`;
+                    return `<span class="badge">${data}</span>`;
+                }},
+                {data: 'pimpinan.name'},
+                {data: 'jabatan.name'},
                 {data: 'created_at'}
             ]
         });
@@ -166,7 +167,7 @@
         table.on('click', '.delete', async function(){
             let data = table.row(this.parentElement.parentElement).data()
             swal({
-                title: `Yakin hapus data ${data.team_name}?`,
+                title: `Yakin hapus jabatan ${data.pimpinan.name}?`,
                 text: `Setelah dihapus, Anda tidak dapat mengurungkan aksi ini.`,
                 type: 'warning',
                 buttons: {confirm: true, cancel: true}
@@ -175,7 +176,6 @@
                 {
                     return axios.post(`{{ route('roles') }}/${data.id}`, {
                         '_method': 'DELETE',
-                        'team_id': data.team_id
                     }).then(res => res.data).then(res => {
                         $.notify({
                             message: res.message,

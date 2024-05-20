@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Models\Traits\HasRolePermission;
 use App\Models\Traits\Ulids;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -70,6 +71,18 @@ class User extends Authenticatable
     public function trainings() : BelongsToMany
     {
         return $this->belongsToMany(Training::class, 'user_training');
+    }
+
+    public function banom() : Attribute
+    {
+        return Attribute::get(fn() =>match($this->personal?->gender)
+        {
+            'L' => 'IPNU',
+            'P' => 'IPPNU',
+            
+            default => null
+
+        });
     }
 
 }
