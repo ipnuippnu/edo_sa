@@ -79,7 +79,7 @@ class ImportUsersFromOld extends Command
 
                     Pimpinan::whereAddressCode($old->address_code)->where('name', 'LIKE', "$level%")->where('name', 'LIKE', "%$name")->get()->each(function ($pimpinan) use($user) {
 
-                        $user->tambahJabatan('operator', $pimpinan, [
+                        $user->addJabatan('operator', $pimpinan, [
                             'status' => JabatanStatus::AKTIF,
                             'confirmed_at' => Carbon::now(),
                         ]);

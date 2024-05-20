@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -30,8 +31,12 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->ip());
         });
 
-        Gate::before(function(User $user){
-            if($user->email === 'isnunas@gmail.com') return true;
+        Blade::directive('personal', function(){
+            return "<?php if(auth()->user()->account_type == 1): ?>";
+        });
+
+        Blade::directive('endpersonal', function(){
+            return "<?php endif; ?>";
         });
     }
 }

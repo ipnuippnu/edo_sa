@@ -16,16 +16,18 @@ Route::middleware(['auth', WizardMiddleware::class])->prefix('L-155-4')->group(f
 
     Route::get('/', HomeController::class)->name('home');
 
-    Route::get('wizard', WizardController::class)->name('wizard');
-    Route::post('wizard', [WizardController::class, 'save'])->name('wizard.save');
+    Route::middleware('personal')->group(function(){
+        Route::get('wizard', WizardController::class)->name('wizard');
+        Route::post('wizard', [WizardController::class, 'save'])->name('wizard.save');
 
-    Route::post('verify', [ContactVerificationController::class, 'verify'])->name('verify');
-    Route::post('verify/request', [ContactVerificationController::class, 'request'])->name('verify.request');
+        Route::post('verify', [ContactVerificationController::class, 'verify'])->name('verify');
+        Route::post('verify/request', [ContactVerificationController::class, 'request'])->name('verify.request');
 
-    Route::apiResource('education_histories', EducationHistoryController::class)->name('index', 'educations');
-    Route::apiResource('trainings', TrainingController::class)->name('index', 'trainings');
-    Route::apiResource('roles', RoleController::class)->name('index', 'roles');
-    Route::apiResource('pimpinans', PimpinanController::class)->name('index', 'pimpinans');
+        Route::apiResource('education_histories', EducationHistoryController::class)->name('index', 'educations');
+        Route::apiResource('trainings', TrainingController::class)->name('index', 'trainings');
+        Route::apiResource('roles', RoleController::class)->name('index', 'roles');
+        Route::apiResource('pimpinans', PimpinanController::class)->name('index', 'pimpinans');
+    });
 
     Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 });

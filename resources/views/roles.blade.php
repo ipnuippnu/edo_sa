@@ -1,11 +1,11 @@
 <x-layout>
-<x-slot:title>Jabatan Pimpinan</x-slot:title>
+<x-slot:title>Peranan (Jabatan & Keanggotaan)</x-slot:title>
 
 <div class="col-md-12">
     <div class="card">
         <div class="card-header">
             <div class="d-flex align-items-center">
-                <h4 class="card-title">Daftar Jabatan Anda di Pimpinan Se-Kab. Trenggalek</h4>
+                <h4 class="card-title">Daftar Peranan Anda di Pimpinan Se-Kab. Trenggalek</h4>
                 <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
                     <i class="fa fa-plus mr-2"></i>
                     Tambah
@@ -50,7 +50,7 @@
                                         </div>
 
                                         <div class="select2-input mb-4">
-                                            <label class="mb-2">Jenis Jabatan <span class="text-danger">*</span></label>
+                                            <label class="mb-2">Jenis Peran <span class="text-danger">*</span></label>
 
                                             <select id="jabatan" name="jabatan" class="form-control" x-model="jabatan">
                                                 {{-- <option value="">Cari Jabatan</option> --}}
@@ -78,7 +78,7 @@
                             <th style="width: 5%">Aksi</th>
                             <th>Status</th>
                             <th>Nama Pimpinan</th>
-                            <th>Jabatan</th>
+                            <th>Peran</th>
                             <th>Ditambahkan Pada</th>
                         </tr>
                     </thead>
@@ -167,7 +167,7 @@
         table.on('click', '.delete', async function(){
             let data = table.row(this.parentElement.parentElement).data()
             swal({
-                title: `Yakin hapus jabatan ${data.pimpinan.name}?`,
+                title: `Yakin hapus peran di ${data.pimpinan.name}?`,
                 text: `Setelah dihapus, Anda tidak dapat mengurungkan aksi ini.`,
                 type: 'warning',
                 buttons: {confirm: true, cancel: true}

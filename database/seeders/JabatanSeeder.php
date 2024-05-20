@@ -16,7 +16,15 @@ class JabatanSeeder extends Seeder
         Jabatan::updateOrCreate([
             'code' => 'operator'
         ], [
-            'name' => 'Operator Pimpinan'
+            'name' => 'Operator Pimpinan',
+            'is_public' => false,
+        ]);
+
+        Jabatan::updateOrCreate([
+            'code' => 'angota'
+        ], [
+            'name' => 'Anggota',
+            'is_public' => false,
         ]);
 
         $roles = [

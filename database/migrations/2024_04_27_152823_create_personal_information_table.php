@@ -36,6 +36,8 @@ return new class extends Migration
             $table->string('rw', 3)->nullable();
             $table->string('dusun')->nullable();
 
+            $table->timestamp('account_verified_at')->nullable();
+
             $table->timestamps();
         });
     }

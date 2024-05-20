@@ -31,7 +31,7 @@ class RoleController extends Controller
     {
         if($request->get('q') != "")
         {
-            $result = Jabatan::{strtolower(Auth::user()->banom)}()->whereFullText('name', $request->get('q'))->get(['id', 'name as text']);
+            $result = Jabatan::{strtolower(Auth::user()->banom)}()->whereIsPublic(true)->whereFullText('name', $request->get('q'))->get(['id', 'name as text']);
 
         }
 
@@ -53,7 +53,7 @@ class RoleController extends Controller
             'pimpinan' => 'required|exists:pimpinans,id'
         ]);
 
-        Auth::user()->tambahJabatan($request->jabatan, $request->pimpinan);
+        Auth::user()->addJabatan($request->jabatan, $request->pimpinan);
 
         Session::flash('message', 'Data berhasil diajukan. Mengunggu persetujuan dari pihak terkait.');
         return redirect()->back();

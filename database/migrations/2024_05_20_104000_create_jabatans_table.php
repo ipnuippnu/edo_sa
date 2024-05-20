@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('banom_only', ['IPNU', 'IPPNU'])->nullable();
 
             $table->unique(['code', 'banom_only']);
+            $table->boolean('is_public')->default(true);
 
             $table->softDeletes();
             $table->timestamps();
