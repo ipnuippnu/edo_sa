@@ -11,6 +11,7 @@ use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\WizardController;
 use App\Http\Middleware\WizardMiddleware;
 use App\Models\Pimpinan;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,6 @@ Route::middleware('guest')->group(function(){
     Route::post('/signup', [SignupController::class, 'signup']);
 });
 
-Route::get('test', function(){
-    clock(Pimpinan::whereHas('wilayah')->get());
-});
+// Route::get('test', function(){
+    // dd(User::first())
+// })

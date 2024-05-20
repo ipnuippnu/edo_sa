@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
 
             FormalTrainingSeeder::class,
             TrainingSeeder::class,
-            RoleSeeder::class,
+            JabatanSeeder::class,
             
             AdminSeeder::class,
         ]);

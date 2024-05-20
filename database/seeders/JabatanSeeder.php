@@ -2,18 +2,23 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Jabatan;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use App\Models\Role;
 
-class RoleSeeder extends Seeder
+class JabatanSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
+        Jabatan::updateOrCreate([
+            'code' => 'operator'
+        ], [
+            'name' => 'Operator Pimpinan'
+        ]);
+
         $roles = [
             //!!! PH (IPNU/IPPNU)
             'ph' => ['Ketua', 'Wakil Ketua', 'Sekretaris', 'Wakil Sekretaris', 'Bendahara', 'Wakil Bendahara'],
@@ -133,9 +138,9 @@ class RoleSeeder extends Seeder
                     $kode_me = Str::slug($role, '_');
 
                     $this->_exec([
-                        'name' => "ph.$kode_me",
+                        'code' => "ph.$kode_me",
                     ],[
-                        'display_name' => $role 
+                        'name' => $role 
                     ]);
                 }
             }
@@ -146,16 +151,16 @@ class RoleSeeder extends Seeder
                     $kode_me = Str::slug($role[0], '_');
 
                     $this->_exec([
-                        'name' => "dep.$kode_me.co",
+                        'code' => "dep.$kode_me.co",
                     ],[
-                        'display_name' => "Koordinator -- " . $role[0],
+                        'name' => "Koordinator -- " . $role[0],
                         'banom_only' => $role[1] ?? null,
                     ]);
 
                     $this->_exec([
-                        'name' => "dep.$kode_me.anggota",
+                        'code' => "dep.$kode_me.anggota",
                     ],[
-                        'display_name' => "Anggota -- " . $role[0],
+                        'name' => "Anggota -- " . $role[0],
                         'banom_only' => $role[1] ?? null,
                     ]);
                 }
@@ -172,9 +177,9 @@ class RoleSeeder extends Seeder
                             $kode_me = implode('.', ['lembaga', Str::slug($key2, '_'), Str::slug($level3, '_')]);
     
                             $this->_exec([
-                                'name' => $kode_me,
+                                'code' => $kode_me,
                             ],[
-                                'display_name' => "$level3 -- $key2",
+                                'name' => "$level3 -- $key2",
                                 'banom_only' => 'IPNU',
                             ]);
                         }
@@ -185,9 +190,9 @@ class RoleSeeder extends Seeder
                                 $kode_me = implode('.', ['lembaga', Str::slug($key2, '_'), Str::slug($key3, '_'), Str::slug($level4, '_')]);
     
                                 $this->_exec([
-                                    'name' => $kode_me,
+                                    'code' => $kode_me,
                                 ],[
-                                    'display_name' => "$level4 -- $key3 -- $key2",
+                                    'name' => "$level4 -- $key3 -- $key2",
                                     'banom_only' => 'IPNU',
                                 ]);
                             }
@@ -207,9 +212,9 @@ class RoleSeeder extends Seeder
                             $kode_me = implode('.', ['lembaga', Str::slug($key2, '_'), Str::slug($level3, '_')]);
     
                             $this->_exec([
-                                'name' => $kode_me,
+                                'code' => $kode_me,
                             ],[
-                                'display_name' => "$level3 -- $key2",
+                                'name' => "$level3 -- $key2",
                                 'banom_only' => 'IPPNU',
                             ]);
                         }
@@ -220,9 +225,9 @@ class RoleSeeder extends Seeder
                                 $kode_me = implode('.', ['lembaga', Str::slug($key2, '_'), Str::slug($key3, '_'), Str::slug($level4, '_')]);
 
                                 $this->_exec([
-                                    'name' => $kode_me,
+                                    'code' => $kode_me,
                                 ],[
-                                    'display_name' => "$level4 -- $key3 -- $key2",
+                                    'name' => "$level4 -- $key3 -- $key2",
                                     'banom_only' => 'IPPNU',
                                 ]);
                             }
@@ -240,9 +245,9 @@ class RoleSeeder extends Seeder
                         $kode_me = implode('.', ['badan', Str::slug($key2, '_'), Str::slug($level3, '_')]);
 
                         $this->_exec([
-                            'name' => $kode_me
+                            'code' => $kode_me
                         ], [
-                            'display_name' => "$level3 -- $key2",
+                            'name' => "$level3 -- $key2",
                             'banom_only' => 'IPNU',
                         ]);
                     }
@@ -258,9 +263,9 @@ class RoleSeeder extends Seeder
                         $kode_me = implode('.', ['badan', Str::slug($key2, '_'), Str::slug($level3, '_')]);
 
                         $this->_exec([
-                            'name' => $kode_me,
+                            'code' => $kode_me,
                         ],[
-                            'display_name' => "$level3 -- $key2",
+                            'name' => "$level3 -- $key2",
                             'banom_only' => 'IPPNU',
                         ]);
                     }
@@ -271,6 +276,6 @@ class RoleSeeder extends Seeder
 
     private function _exec(array $first, array $second)
     {
-        Role::updateOrCreate($first, $second);
+        Jabatan::updateOrCreate($first, $second);
     }
 }

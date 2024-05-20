@@ -11,19 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pimpinans', function (Blueprint $table) {
+        Schema::create('jabatans', function (Blueprint $table) {
             $table->id();
-            $table->ulid('ulid')->index();
 
-            $table->string('address_code');
+            $table->string('code')->unique();
             $table->string('name')->fulltext();
 
-            $table->enum('level', ['PC', 'PAC', 'PR', 'PK']);
-            $table->enum('banom', ['IPNU', 'IPPNU']);
-            $table->string('picture')->nullable();
-            
-            $table->timestamps();
+            $table->enum('banom_only', ['IPNU', 'IPPNU'])->nullable();
+
+            $table->unique(['code', 'banom_only']);
+
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pimpinans');
+        Schema::dropIfExists('jabatans');
     }
 };

@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Training::class);
 
+            $table->primary(['user_id', 'training_id']);
+
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }

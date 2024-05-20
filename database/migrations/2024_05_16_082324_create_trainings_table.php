@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('pelaksana');
             $table->string('year', 4);
+
+            // SIAPA YANG MEMBUAT
             $table->foreignIdFor(User::class, 'creator_id')->nullable()->constrained('users');
 
             $table->fullText(['name', 'pelaksana', 'year']);

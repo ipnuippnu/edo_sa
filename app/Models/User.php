@@ -4,9 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\Traits\HasRolePermission;
 use App\Models\Traits\Ulids;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,14 +13,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Laratrust\Contracts\LaratrustUser;
-use Laratrust\Traits\HasRolesAndPermissions;
 
-class User extends Authenticatable implements LaratrustUser
+class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRolesAndPermissions, SoftDeletes, Ulids;
+    use HasFactory, Notifiable, SoftDeletes, Ulids, HasRolePermission;
 
     protected $guarded = ['id'];
 
@@ -48,19 +44,14 @@ class User extends Authenticatable implements LaratrustUser
         ];
     }
 
-    protected function getDefaultGuardName(): string
-    {
-        return 'web';
-    }
+    // protected function getDefaultGuardName(): string
+    // {
+    //     return 'web';
+    // }
 
     public function personal() : HasOne
     {
         return $this->hasOne(PersonalInformation::class);
-    }
-
-    public function name() : Attribute
-    {
-        return Attribute::make(set: fn(string $value) => ucwords(strtolower($value)));
     }
 
     public function getProfilePictureAttribute()
@@ -79,15 +70,6 @@ class User extends Authenticatable implements LaratrustUser
     public function trainings() : BelongsToMany
     {
         return $this->belongsToMany(Training::class, 'user_training');
-    }
-
-    public function confirmRole(int $role_id, int $team_id) : self
-    {
-        DB::table('role_user')->whereUserId($this->id)->whereRoleId($role_id)->whereTeamId($team_id)->update([
-            'confirmed_at' => Carbon::now()
-        ]);
-
-        return $this;
     }
 
 }

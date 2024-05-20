@@ -14,20 +14,18 @@ class PimpinanSeeder extends Seeder
     public function run(): void
     {
         Pimpinan::updateOrCreate([
-            'name' => Pimpinan::generateNameCodeFromDisplayName('PC IPNU Trenggalek', '35.03'),
-        ], [
-            'display_name' => 'PC IPNU Trenggalek',
-            'banom' => 'IPNU',
+            'name' => 'PC IPNU Trenggalek',
             'address_code' => '35.03',
+        ], [
+            'banom' => 'IPNU',
             'level' => 'PC',
         ]);
 
         Pimpinan::updateOrCreate([
-            'name' => Pimpinan::generateNameCodeFromDisplayName('PC IPPNU Trenggalek', '35.03'),
-        ], [
-            'display_name' => 'PC IPPNU Trenggalek',
-            'banom' => 'IPPNU',
+            'name' => 'PC IPPNU Trenggalek',
             'address_code' => '35.03',
+        ], [
+            'banom' => 'IPPNU',
             'level' => 'PC',
         ]);
     }
