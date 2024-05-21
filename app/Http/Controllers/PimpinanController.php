@@ -21,7 +21,8 @@ class PimpinanController extends Controller
 
             })->get()->map(fn($v) => [
                 'id' => $v->id,
-                'text' => $v->display_name
+                'text' => $v->display_name,
+                'level' => $v->level
             ]);
         }
 

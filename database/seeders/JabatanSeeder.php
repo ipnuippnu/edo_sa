@@ -21,7 +21,7 @@ class JabatanSeeder extends Seeder
         ]);
 
         Jabatan::updateOrCreate([
-            'code' => 'angota'
+            'code' => 'anggota'
         ], [
             'name' => 'Anggota',
             'is_public' => false,

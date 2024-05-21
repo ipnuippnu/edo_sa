@@ -32,7 +32,6 @@ class RoleController extends Controller
         if($request->get('q') != "")
         {
             $result = Jabatan::{strtolower(Auth::user()->banom)}()->whereIsPublic(true)->whereFullText('name', $request->get('q'))->get(['id', 'name as text']);
-
         }
 
         else $result = [];
@@ -49,9 +48,15 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'jabatan' => 'required|exists:jabatans,id',
-            'pimpinan' => 'required|exists:pimpinans,id'
+            'pimpinan' => 'required|exists:pimpinans,id',
+            'jabatan' => 'required_if:pimpinan,exists:jabatans,id',
+            'is_pengurus' => 'in:pengurus'
         ]);
+
+        $jabatan = Jabatan::findOrFail($request->jabatan);
+        $pimpinan = Pimpinan::findOrFail($request->pimpinan);
+
+        dd($jabatan);
 
         Auth::user()->addJabatan($request->jabatan, $request->pimpinan);
 

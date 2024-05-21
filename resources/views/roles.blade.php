@@ -22,7 +22,7 @@
                                 <span class="fw-mediumbold">
                                 Tambah</span> 
                                 <span class="fw-light">
-                                    Jabatan Baru
+                                    Peran Baru
                                 </span>
                             </h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -31,8 +31,7 @@
                         </div>
                         <div class="modal-body">
 
-                            <p class="small"><b>Informasi!</b> Jika pimpinan / jabatan tidak tersedia pada pilihan, silahkan menghubungi <a href="//wa.me/{{ config('app.admin.phone') }}" target="_blank">Pengelola</a>.</p>
-
+                            <p class="small"><b>Informasi!</b> Jika jenis peran / pimpinan tidak tersedia pada pilihan, silahkan menghubungi <a href="//wa.me/{{ config('app.admin.phone') }}" target="_blank">Pengelola</a>.</p>
 
                             <form x-data="$store.formulir" method="POST" action="" id="formulir">
                                 @csrf
@@ -40,8 +39,8 @@
 
                                     <div class="col-12">
 
-                                        <div class="select2-input mb-4">
-                                            <label class="mb-2">Pilih Pimpinan <span class="text-danger">*</span></label>
+                                        <div class="select2-input form-group mb-0">
+                                            <label class="mb-2 form-label">Pilih Pimpinan <span class="text-danger">*</span></label>
 
                                             <select id="pimpinan" name="pimpinan" class="form-control" x-model="pimpinan">
                                                 {{-- <option value="">Cari Pimpinan</option> --}}
@@ -49,8 +48,13 @@
 
                                         </div>
 
-                                        <div class="select2-input mb-4">
-                                            <label class="mb-2">Jenis Peran <span class="text-danger">*</span></label>
+                                        <div :class="{ 'form-group pengurus': true, 'd-flex': ['PK', 'PR'].includes(pimpinan_level), 'd-none': !['PK', 'PR'].includes(pimpinan_level) }">
+                                            <label class="form-label my-auto">Apakah Anda adalah pengurus?</label>
+                                            <input type="checkbox" data-toggle="toggle" data-on="YA" data-off="TIDAK" data-onstyle="success" data-offstyle="danger" data-style="btn-round w-25 ml-2" name="is_pengurus" value="pengurus">
+                                        </div>
+
+                                        <div class="select2-input form-group" x-show="pengurus || ['PC', 'PAC'].includes(pimpinan_level)">
+                                            <label class="mb-2 form-label">Jenis Peran <span class="text-danger">*</span></label>
 
                                             <select id="jabatan" name="jabatan" class="form-control" x-model="jabatan">
                                                 {{-- <option value="">Cari Jabatan</option> --}}
@@ -107,94 +111,111 @@
             Alpine.store('formulir', {
                 'jabatan': '',
                 'pimpinan': '',
+                'pengurus': false,
+                'pimpinan_level': ''
             })
-        })
+            
+            $(document).ready(function(){
+                $('#pimpinan').select2({
+                    placeholder: 'Cari Pimpinan',
+                    allowClear: true,
+                    width: '100%',
+                    dropdownParent: $('#addRowModal'),
+                    theme: "bootstrap",
+                    ajax: {
+                        url: '{{ route('pimpinans') }}',
+                        dataType: 'json',
+                        delay: 500
+                    }
+                }).on('select2:select', function(e) {
+                    Alpine.store('formulir').pimpinan = e.target.value
+                    Alpine.store('formulir').pimpinan_level = e.params.data.level
+                })
 
-        $('#pimpinan').select2({
-            placeholder: 'Cari Pimpinan',
-            allowClear: true,
-            width: '100%',
-            dropdownParent: $('#addRowModal'),
-            theme: "bootstrap",
-            ajax: {
-                url: '{{ route('pimpinans') }}',
-                dataType: 'json',
-                delay: 500
-            }
-        }).on('select2:select', (e) => Alpine.store('formulir').pimpinan = e.target.value)
+                $('#jabatan').select2({
+                    placeholder: 'Cari Jabatan',
+                    allowClear: true,
+                    width: '100%',
+                    dropdownParent: $('#addRowModal'),
+                    theme: "bootstrap",
+                    ajax: {
+                        url: '{{ route('roles') }}',
+                        dataType: 'json',
+                        delay: 500
+                    }
+                }).on('select2:select', (e) => Alpine.store('formulir').jabatan = e.target.value)
 
-        $('#jabatan').select2({
-            placeholder: 'Cari Jabatan',
-            allowClear: true,
-            width: '100%',
-            dropdownParent: $('#addRowModal'),
-            theme: "bootstrap",
-            ajax: {
-                url: '{{ route('roles') }}',
-                dataType: 'json',
-                delay: 500
-            }
-        }).on('select2:select', (e) => Alpine.store('formulir').jabatan = e.target.value)
+                const table = $('#table').DataTable({
+                    ajax: '{{ route('roles') }}',
+                    order: [[1, 'asc']],
+                    columnDefs: [{
+                        targets: 4,
+                        render: data => moment(data).fromNow()
+                    }],
+                    columns: [
+                        {orderable: false, searchable: false, render(a, b, c){
 
-        const table = $('#table').DataTable({
-            ajax: '{{ route('roles') }}',
-            order: [[1, 'asc']],
-            columnDefs: [{
-                targets: 4,
-                render: data => moment(data).fromNow()
-            }],
-            columns: [
-                {orderable: false, searchable: false, render(a, b, c){
+                            return `
+                                <div class="d-flex">
+                                    <button class="btn btn-sm btn-danger mr-1 delete" title="Hapus"><i class="fas fa-trash"></i></button>
+                                </div>
+                            `
+                            
+                        }},
+                        {data: 'status', render(data){
+                            if(data == "PENDING") return `<span class="badge badge-secondary">${data}</span>`;
+                            else if(data == "AKTIF") return `<span class="badge badge-success">${data}</span>`;
+                            return `<span class="badge">${data}</span>`;
+                        }},
+                        {data: 'pimpinan.name'},
+                        {data: 'jabatan.name'},
+                        {data: 'created_at'}
+                    ]
+                });
 
-                    return `
-                        <div class="d-flex">
-                            <button class="btn btn-sm btn-danger mr-1 delete" title="Hapus"><i class="fas fa-trash"></i></button>
-                        </div>
-                    `
-                    
-                }},
-                {data: 'status', render(data){
-                    if(data == "PENDING") return `<span class="badge badge-secondary">${data}</span>`;
-                    else if(data == "AKTIF") return `<span class="badge badge-success">${data}</span>`;
-                    return `<span class="badge">${data}</span>`;
-                }},
-                {data: 'pimpinan.name'},
-                {data: 'jabatan.name'},
-                {data: 'created_at'}
-            ]
-        });
+                table.on('click', '.delete', async function(){
+                    let data = table.row(this.parentElement.parentElement).data()
+                    swal({
+                        title: `Yakin hapus peran di ${data.pimpinan.name}?`,
+                        text: `Setelah dihapus, Anda tidak dapat mengurungkan aksi ini.`,
+                        type: 'warning',
+                        buttons: {confirm: true, cancel: true}
+                    }).then(Delete => {
+                        if(Delete)
+                        {
+                            return axios.post(`{{ route('roles') }}/${data.id}`, {
+                                '_method': 'DELETE',
+                            }).then(res => res.data).then(res => {
+                                $.notify({
+                                    message: res.message,
+                                    icon: 'fa fa-info',
+                                    title: 'Informasi!'
+                                },{
+                                    type: 'primary',
+                                    placement: {
+                                        from: 'top',
+                                        align: 'right'
+                                    },
+                                    time: 1000,
+                                    delay: 0,
+                                });
 
-        table.on('click', '.delete', async function(){
-            let data = table.row(this.parentElement.parentElement).data()
-            swal({
-                title: `Yakin hapus peran di ${data.pimpinan.name}?`,
-                text: `Setelah dihapus, Anda tidak dapat mengurungkan aksi ini.`,
-                type: 'warning',
-                buttons: {confirm: true, cancel: true}
-            }).then(Delete => {
-                if(Delete)
-                {
-                    return axios.post(`{{ route('roles') }}/${data.id}`, {
-                        '_method': 'DELETE',
-                    }).then(res => res.data).then(res => {
-                        $.notify({
-                            message: res.message,
-                            icon: 'fa fa-info',
-                            title: 'Informasi!'
-                        },{
-                            type: 'primary',
-                            placement: {
-                                from: 'top',
-                                align: 'right'
-                            },
-                            time: 1000,
-                            delay: 0,
-                        });
-
-                        table.ajax.reload()
+                                table.ajax.reload()
+                            })
+                        }
                     })
+                })
+                function gantiJabatan()
+                {
+                    Alpine.store('formulir').pengurus = $('.pengurus input')[0].checked
                 }
+
+                $('.pengurus').on('change', 'input', gantiJabatan)
+                gantiJabatan()
+
+
             })
+
         })
 
     })()

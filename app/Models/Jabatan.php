@@ -22,4 +22,5 @@ class Jabatan extends Model
     {
         return $builder->whereBanomOnly('IPPNU')->orWhereNull('banom_only');
     }
+
 }

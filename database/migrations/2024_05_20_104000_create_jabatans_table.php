@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->string('name')->fulltext();
 
+            //IF NULL ADALAH SEMUA
             $table->enum('banom_only', ['IPNU', 'IPPNU'])->nullable();
 
             $table->unique(['code', 'banom_only']);
