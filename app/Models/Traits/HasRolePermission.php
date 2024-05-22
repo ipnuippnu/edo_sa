@@ -38,7 +38,7 @@ trait HasRolePermission
 
     public function addJabatan(int|Jabatan|string $jabatan, int|Pimpinan $pimpinan, array $attributes = [])
     {
-        if($jabatan instanceof Jabatan) $jabatan = Jabatan::find($jabatan)->id;
+        if($jabatan instanceof Jabatan) $jabatan = $jabatan->id;
         elseif(is_numeric($jabatan)) $jabatan = (int) $jabatan;
         else if(is_string($jabatan)) $jabatan = Jabatan::whereCode($jabatan)->first()->id;
 

@@ -79,7 +79,7 @@ class SignupController extends Controller
 
         if(PersonalInformation::wherePhone( $phone )->exists())
             throw ValidationException::withMessages([
-                'phone' => 'Nomor telepon telah didaftarkan. Jika ini milik anda, <a target="_blank" href="//wa.me/'.config('app.admin.phone').'">Hubungi Pengelola</a>.'
+                'phone' => 'Nomor telepon telah didaftarkan. Jika ini milik anda, <a target="_blank" href="//wa.me/'.config('app.admin.phone').'">Hubungi '.config('app.admin.name').'</a>.'
             ]);
 
         return $phone;

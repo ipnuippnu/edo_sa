@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\Login;
 use App\Http\Controllers\Controller;
 use App\Models\PersonalInformation;
 use App\Models\User;
@@ -38,6 +39,8 @@ class LoginController extends Controller
         else $this->_usingPhone($username, $password, $request->has('remember'));
 
         $request->session()->regenerate();
+        
+
         return redirect()->route('home');
         
     }
@@ -63,14 +66,13 @@ class LoginController extends Controller
                 $user = $personal->user;
                 if(Hash::check($pass, $user->password))
                 {
+                    $this->_successfullEvent($user);
                     return Auth::loginUsingId($user->id);
                 }
             }
 
         }
-        catch (PhoneNumberParseException $e) {
-
-        }
+        catch (PhoneNumberParseException $e) {}
 
         $this->_invalid();
     }
@@ -79,10 +81,19 @@ class LoginController extends Controller
     {
         if($user = User::whereEmail($email)->first())
         {
-            if(Auth::attempt(['email' => $email, 'password' => $pass], $remember)) return;
+            if(Auth::attempt(['email' => $email, 'password' => $pass], $remember))
+            {
+                $this->_successfullEvent($user);
+                return;
+            }
         }
 
         $this->_invalid();
+    }
+
+    private function _successfullEvent(User $user)
+    {
+        Login::dispatch($user);
     }
 
     private function _invalid()

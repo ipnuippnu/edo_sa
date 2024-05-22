@@ -15,6 +15,8 @@ class Wilayah extends Model
     public $incrementing = false;
     protected $table = 'wilayah';
 
+    const REGEX = "/\w{2}\.\w{2}.\w{2}.\w{4}/";
+
     public function level() : Attribute
     {
         return new Attribute(

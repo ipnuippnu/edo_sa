@@ -17,7 +17,7 @@ class Pimpinan extends Model
 
     public function parent() : Attribute
     {
-        return Attribute::get(fn() => Wilayah::find(preg_replace("/\.\d+$/", '', $this->address_code)));
+        return Attribute::get(fn() => Wilayah::find(preg_replace("/\.\w+$/", '', $this->address_code)));
     }
 
     public function displayName() : Attribute

@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Jabatan;
 use App\Models\Pimpinan;
 use App\Models\UserJabatan;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class RoleController extends Controller
 {
@@ -47,20 +51,27 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'pimpinan' => 'required|exists:pimpinans,id',
-            'jabatan' => 'required_if:pimpinan,exists:jabatans,id',
-            'is_pengurus' => 'in:pengurus'
-        ]);
-
-        $jabatan = Jabatan::findOrFail($request->jabatan);
         $pimpinan = Pimpinan::findOrFail($request->pimpinan);
 
-        dd($jabatan);
+        $request->validate([
+            'pimpinan' => 'required',
+            'jabatan' => ['exists:jabatans,id', Rule::when(!in_array($pimpinan->level, ['PK', 'PR']), 'required') ],
+            'is_pengurus' => 'in:pengurus'
+        ]);
+        
+        if(in_array($pimpinan->level, ['PK', 'PR']) && !$request->exists('is_pengurus'))
+        {
+            $jabatan = Jabatan::whereCode('anggota')->firstOrFail('id');
+        }
+        else if($request->exists('jabatan'))
+        {
+            $jabatan = Jabatan::whereIsPublic(true)->whereId($request->jabatan)->firstOrFail('id');
+        }
+        else throw new Exception("Kondisi tidak terhandle");
 
-        Auth::user()->addJabatan($request->jabatan, $request->pimpinan);
+        Auth::user()->addJabatan($jabatan, $pimpinan);
 
-        Session::flash('message', 'Data berhasil diajukan. Mengunggu persetujuan dari pihak terkait.');
+        Session::flash('message', "Data peranan $pimpinan->name berhasil diajukan. Menunggu persetujuan dari pihak terkait.");
         return redirect()->back();
     }
 

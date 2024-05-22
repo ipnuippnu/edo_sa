@@ -124,7 +124,7 @@ return [
     ],
 
     'admin' => [
-        'name' => 'Mindo - Admin EDO',
+        'name' => 'Admin EDO',
         'phone' => '6285962324754',
         'email' => 'info@pelajartrenggalek.or.id',
     ],

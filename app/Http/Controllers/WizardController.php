@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\WizardMiddleware;
+use App\Models\Wilayah;
 use App\Rules\NiceNameRule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -27,7 +28,7 @@ class WizardController extends Controller
             'born_date' => 'required|date',
             'joined_year' => 'required|digits:4',
             'profile' => [Rule::requiredIf(auth()->user()->picture == null), 'image'],
-            'alamat' => 'required|exists:wilayah,kode|regex:/\w{2}\.\w{2}.\w{2}.\w{4}/',
+            'alamat' => 'required|exists:wilayah,kode|regex:' . Wilayah::REGEX,
             'rt' => 'required|numeric|min:1|max_digits:3',
             'rw' => 'required|numeric|min:1|max_digits:3',
             'dusun' => 'required'

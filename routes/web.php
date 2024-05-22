@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\Team\Team;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SignupController;
 use App\Http\Controllers\ContactVerificationController;
@@ -10,6 +11,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\WizardController;
 use App\Http\Middleware\WizardMiddleware;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', WizardMiddleware::class])->prefix('L-155-4')->group(function(){
@@ -40,4 +43,17 @@ Route::middleware('guest')->group(function(){
 
     Route::get('/signup', SignupController::class)->name('signup');
     Route::post('/signup', [SignupController::class, 'signup']);
+});
+
+
+Route::get('/test', function(){
+    dd(app(Team::class));
+
+    dump(Auth::user());
+    
+    User::find(1)->update([
+        'name' => 'Muhammad Isnu Nasrudin'
+    ]);
+
+    dump(Auth::user());
 });

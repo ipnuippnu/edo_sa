@@ -5,7 +5,7 @@
     <div class="card">
         <div class="card-header">
             <div class="d-flex align-items-center">
-                <h4 class="card-title">Daftar Peranan Anda di Pimpinan Se-Kab. Trenggalek</h4>
+                <h4 class="card-title">Daftar Peranan Anda di Pimpinan <span class="text-danger fw-bold">Se-<abbr title="Kabupaten">Kab</abbr>. Trenggalek</span></h4>
                 <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
                     <i class="fa fa-plus mr-2"></i>
                     Tambah
@@ -31,7 +31,7 @@
                         </div>
                         <div class="modal-body">
 
-                            <p class="small"><b>Informasi!</b> Jika jenis peran / pimpinan tidak tersedia pada pilihan, silahkan menghubungi <a href="//wa.me/{{ config('app.admin.phone') }}" target="_blank">Pengelola</a>.</p>
+                            <p class="small"><b>Informasi!</b> Jika jenis peran / pimpinan tidak tersedia pada pilihan, silahkan menghubungi <a href="//wa.me/{{ config('app.admin.phone') }}" target="_blank">{{ config('app.admin.name') }}</a>.</p>
 
                             <form x-data="$store.formulir" method="POST" action="" id="formulir">
                                 @csrf
@@ -54,7 +54,7 @@
                                         </div>
 
                                         <div class="select2-input form-group" x-show="pengurus || ['PC', 'PAC'].includes(pimpinan_level)">
-                                            <label class="mb-2 form-label">Jenis Peran <span class="text-danger">*</span></label>
+                                            <label class="mb-2 form-label">Jenis Jabatan <span class="text-danger">*</span></label>
 
                                             <select id="jabatan" name="jabatan" class="form-control" x-model="jabatan">
                                                 {{-- <option value="">Cari Jabatan</option> --}}
